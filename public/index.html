@@ -1,0 +1,1125 @@
+
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Alex Hackney - Full Stack Developer specializing in PHP, Laravel, Vue, React, and DevOps. Based in Clearwater, FL.">
+    <meta name="keywords" content="Full Stack Developer, PHP, Laravel, Vue, React, DevOps, AWS, Video Streaming">
+    <meta name="author" content="Alex Hackney">
+    <title>Alex Hackney | Full Stack Developer</title>
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        dark: {
+                            900: '#0a0a0f',
+                            800: '#12121a',
+                            700: '#1a1a25',
+                            600: '#242430',
+                        },
+                        accent: {
+                            blue: '#3b82f6',
+                            red: '#ef4444',
+                            purple: '#8b5cf6',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+    <style>
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0a0a0f;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #3b82f6;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #2563eb;
+        }
+
+        /* Animated gradient background */
+        html, body {
+            width: 100%;
+            min-height: 100%;
+        }
+        .gradient-bg {
+            background: linear-gradient(135deg, #0a0a0f 0%, #1a1a2e 50%, #16213e 100%);
+            position: relative;
+            overflow-x: hidden;
+            min-width: 100%;
+        }
+
+        /* Floating particles canvas */
+        #particles-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* Parallax sections */
+        .parallax-section {
+            transform: translateZ(0);
+            will-change: transform;
+        }
+
+        /* Glowing text effect */
+        .glow-text {
+            text-shadow: 0 0 20px rgba(59, 130, 246, 0.5),
+                         0 0 40px rgba(59, 130, 246, 0.3),
+                         0 0 60px rgba(59, 130, 246, 0.1);
+        }
+
+        /* Card hover effects */
+        .card-hover {
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
+        }
+        .card-hover:hover {
+            transform: translateY(-5px);
+            border-color: rgba(59, 130, 246, 0.3);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4),
+                        0 0 30px rgba(59, 130, 246, 0.1);
+        }
+
+        /* Skill badge animation */
+        .skill-badge {
+            transition: all 0.2s ease;
+        }
+        .skill-badge:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.4);
+        }
+
+        /* Gradient border effect */
+        .gradient-border {
+            position: relative;
+            background: #12121a;
+        }
+        .gradient-border::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            padding: 1px;
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6, #ef4444);
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            border-radius: inherit;
+            pointer-events: none;
+        }
+
+        /* Mobile nav animation */
+        .mobile-nav {
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+        .mobile-nav.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* Mobile nav menu item animations */
+        .mobile-nav .mobile-nav-link {
+            opacity: 0;
+            transform: translateX(30px);
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+        .mobile-nav.active .mobile-nav-link:nth-child(1) { transition-delay: 0.1s; }
+        .mobile-nav.active .mobile-nav-link:nth-child(2) { transition-delay: 0.15s; }
+        .mobile-nav.active .mobile-nav-link:nth-child(3) { transition-delay: 0.2s; }
+        .mobile-nav.active .mobile-nav-link:nth-child(4) { transition-delay: 0.25s; }
+        .mobile-nav.active .mobile-nav-link:nth-child(5) { transition-delay: 0.3s; }
+        .mobile-nav.active .mobile-nav-link {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        /* Fade in animation */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Typing cursor */
+        .typing-cursor::after {
+            content: '|';
+            animation: blink 1s infinite;
+        }
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+        }
+
+        /* Code block styling */
+        .code-block {
+            background: linear-gradient(135deg, #1a1a25 0%, #12121a 100%);
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        /* Pulse animation for status indicator */
+        .pulse-dot {
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        /* Section divider */
+        .section-divider {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.3), transparent);
+        }
+    </style>
+</head>
+<body class="gradient-bg text-gray-100 font-sans antialiased">
+    <!-- Animated Background Canvas -->
+    <canvas id="particles-canvas"></canvas>
+
+    <!-- Navigation -->
+    <nav class="fixed top-0 left-0 right-0 w-full z-50 bg-dark-900/80 backdrop-blur-lg border-b border-white/5">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <!-- Logo -->
+                <a href="#home" class="flex items-center space-x-2">
+                    <span class="text-xl font-bold bg-gradient-to-r from-accent-blue to-accent-purple bg-clip-text text-transparent">
+                        AH
+                    </span>
+                    <span class="hidden sm:inline text-gray-400 text-sm font-mono">// developer</span>
+                </a>
+
+                <!-- Desktop Navigation -->
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#about" class="text-gray-400 hover:text-white transition-colors text-sm">About</a>
+                    <a href="#skills" class="text-gray-400 hover:text-white transition-colors text-sm">Skills</a>
+                    <a href="#projects" class="text-gray-400 hover:text-white transition-colors text-sm">Projects</a>
+                    <a href="#experience" class="text-gray-400 hover:text-white transition-colors text-sm">Experience</a>
+                    <a href="#contact" class="px-4 py-2 bg-accent-blue hover:bg-blue-600 rounded-lg text-sm font-medium transition-colors !text-black">
+                        Contact
+                    </a>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <button id="mobile-menu-btn" class="md:hidden p-2 text-gray-400 hover:text-white">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Mobile Navigation (outside nav for proper positioning) -->
+    <div id="mobile-nav" class="mobile-nav fixed top-0 left-0 right-0 bottom-0 bg-dark-900/95 backdrop-blur-sm md:hidden z-[60] flex items-center justify-center">
+        <button id="mobile-nav-close" class="absolute top-4 right-4 p-2 text-gray-400 hover:text-white">
+            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+            </svg>
+        </button>
+        <div class="flex flex-col items-center space-y-6">
+            <a href="#about" class="mobile-nav-link text-gray-300 hover:text-white py-2 text-2xl font-medium">About</a>
+            <a href="#skills" class="mobile-nav-link text-gray-300 hover:text-white py-2 text-2xl font-medium">Skills</a>
+            <a href="#projects" class="mobile-nav-link text-gray-300 hover:text-white py-2 text-2xl font-medium">Projects</a>
+            <a href="#experience" class="mobile-nav-link text-gray-300 hover:text-white py-2 text-2xl font-medium">Experience</a>
+            <a href="#contact" class="mobile-nav-link mt-4 px-8 py-3 bg-accent-blue hover:bg-blue-600 rounded-lg text-center font-medium transition-colors !text-black text-xl">
+                Contact
+            </a>
+        </div>
+    </div>
+
+    <!-- Hero Section -->
+    <section id="home" class="min-h-screen flex items-center justify-center relative pt-16 parallax-section">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-20 relative z-10">
+            <div class="text-center">
+                <!-- Main Heading -->
+                <h1 class="text-4xl sm:text-5xl md:text-7xl font-bold mb-6 fade-in">
+                    <span class="text-white">Hi, I'm </span>
+                    <span class="bg-gradient-to-r from-accent-blue via-accent-purple to-accent-red bg-clip-text text-transparent glow-text">
+                        Alex Hackney
+                    </span>
+                </h1>
+
+                <!-- Subtitle with typing effect -->
+                <div class="text-xl sm:text-2xl text-gray-400 mb-8 fade-in">
+                    <span class="font-mono text-accent-blue">&lt;</span>
+                    <span id="typed-text" class="typing-cursor">Full Stack Developer</span>
+                    <span class="font-mono text-accent-blue">/&gt;</span>
+                </div>
+
+                <!-- Description -->
+                <p class="max-w-2xl mx-auto text-gray-400 text-lg mb-12 leading-relaxed fade-in">
+                    Building robust applications with modern technologies. Specializing in
+                    <a href="https://laravel.com" target="_blank" rel="noopener noreferrer" class="text-accent-blue hover:underline">Laravel</a>,
+                    <a href="https://vuejs.org" target="_blank" rel="noopener noreferrer" class="text-accent-purple hover:underline">Vue</a>,
+                    <a href="https://react.dev" target="_blank" rel="noopener noreferrer" class="text-accent-red hover:underline">React</a>,
+                    <a href="https://thestreamplatform.com" target="_blank" rel="noopener noreferrer" class="text-green-400 hover:underline">video streaming solutions</a>, and
+                    <a href="https://kyovacommunications.com" target="_blank" rel="noopener noreferrer" class="text-cyan-400 hover:underline">cloud communications systems</a>.
+                </p>
+
+                <!-- CTA Buttons -->
+                <div class="flex flex-col sm:flex-row items-center justify-center gap-4 fade-in">
+                    <a href="#projects" class="px-8 py-3 bg-accent-blue hover:bg-blue-600 rounded-lg font-medium transition-all hover:shadow-lg hover:shadow-blue-500/25">
+                        View My Work
+                    </a>
+                    <a href="#contact" class="px-8 py-3 bg-dark-700 hover:bg-dark-600 rounded-lg font-medium border border-white/10 transition-all">
+                        Get In Touch
+                    </a>
+                </div>
+
+                <!-- Scroll Indicator -->
+                <div class="absolute bottom-10 left-1/2 -translate-x-1/2 animate-bounce">
+                    <svg class="w-6 h-6 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"/>
+                    </svg>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-12 sm:py-24 relative z-10 parallax-section">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="section-divider mb-8 sm:mb-16"></div>
+
+            <div class="grid md:grid-cols-2 gap-8 sm:gap-12 items-center">
+                <!-- About Text -->
+                <div class="fade-in">
+                    <h2 class="text-3xl sm:text-4xl font-bold mb-6">
+                        <span class="text-accent-blue font-mono text-lg block mb-2">01.</span>
+                        About Me
+                    </h2>
+                    <div class="space-y-4 text-gray-400 leading-relaxed">
+                        <p>
+                            I'm a full stack developer from Eastern Kentucky, now based in
+                            <span class="text-white">Clearwater, FL</span>. I love building applications
+                            that solve real problems and deliver exceptional user experiences.
+                        </p>
+                        <p>
+                            With extensive experience in <span class="text-accent-blue">video streaming</span>
+                            and <span class="text-accent-purple">production systems</span>, I've worked on
+                            projects that handle high-traffic, real-time data processing and delivery.
+                        </p>
+                        <p>
+                            I'm passionate about clean code, modern development practices, and leveraging
+                            <span class="text-green-400">AI tools</span> to enhance productivity and innovation.
+                        </p>
+                        <p>
+                            Outside of coding, I'm a proud dad to two daughters, <span class="text-white">Haley (24)</span>
+                            and <span class="text-white">Scarlett (7)</span>, and grandfather to
+                            <span class="text-pink-400">Willow (4)</span> and <span class="text-pink-400">Stella (3)</span>.
+                        </p>
+                    </div>
+
+                    <!-- Quick Stats -->
+                    <div class="grid grid-cols-3 gap-2 sm:gap-4 mt-6 sm:mt-8">
+                        <div class="text-center p-2 sm:p-4 bg-dark-700/30 rounded-lg border border-white/5">
+                            <div class="text-xl sm:text-2xl font-bold text-accent-blue">10+</div>
+                            <div class="text-xs sm:text-sm text-gray-500">Years Coding</div>
+                        </div>
+                        <div class="text-center p-2 sm:p-4 bg-dark-700/30 rounded-lg border border-white/5">
+                            <div class="text-xl sm:text-2xl font-bold text-accent-purple">50+</div>
+                            <div class="text-xs sm:text-sm text-gray-500">Projects</div>
+                        </div>
+                        <div class="text-center p-2 sm:p-4 bg-dark-700/30 rounded-lg border border-white/5">
+                            <div class="text-xl sm:text-2xl font-bold text-accent-red">100</div>
+                            <div class="text-xs sm:text-sm text-gray-500">GitHub Stars</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Code Block -->
+                <div class="fade-in">
+                    <div class="code-block rounded-xl p-4 sm:p-6 border border-white/5">
+                        <div class="flex items-center space-x-2 mb-4">
+                            <div class="w-3 h-3 rounded-full bg-red-500"></div>
+                            <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
+                            <div class="w-3 h-3 rounded-full bg-green-500"></div>
+                            <span class="text-gray-500 text-sm ml-4">developer.php</span>
+                        </div>
+                        <pre class="text-sm overflow-x-auto"><code class="text-gray-300"><span class="text-accent-purple">class</span> <span class="text-green-400">Developer</span> <span class="text-accent-purple">extends</span> <span class="text-accent-blue">Human</span>
+{
+    <span class="text-accent-purple">public string</span> <span class="text-accent-red">$name</span> = <span class="text-yellow-300">'Alex Hackney'</span>;
+    <span class="text-accent-purple">public string</span> <span class="text-accent-red">$location</span> = <span class="text-yellow-300">'Clearwater, FL'</span>;
+
+    <span class="text-accent-purple">public array</span> <span class="text-accent-red">$skills</span> = [
+        <span class="text-yellow-300">'PHP'</span>, <span class="text-yellow-300">'Laravel'</span>, <span class="text-yellow-300">'JavaScript'</span>,
+        <span class="text-yellow-300">'Vue'</span>, <span class="text-yellow-300">'React'</span>, <span class="text-yellow-300">'AWS'</span>,
+        <span class="text-yellow-300">'Video Streaming'</span>, <span class="text-yellow-300">'DevOps'</span>
+    ];
+
+    <span class="text-accent-purple">public function</span> <span class="text-accent-blue">build</span>(): <span class="text-green-400">Application</span>
+    {
+        <span class="text-accent-purple">return</span> <span class="text-accent-red">$this</span>-><span class="text-accent-blue">cokeZero</span>()
+            -><span class="text-accent-blue">code</span>()
+            -><span class="text-accent-blue">deploy</span>();
+    }
+}</code></pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Skills Section -->
+    <section id="skills" class="py-12 sm:py-24 relative z-10 parallax-section">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="section-divider mb-8 sm:mb-16"></div>
+
+            <div class="text-center mb-8 sm:mb-16 fade-in">
+                <h2 class="text-3xl sm:text-4xl font-bold mb-4">
+                    <span class="text-accent-blue font-mono text-lg block mb-2">02.</span>
+                    Skills & Technologies
+                </h2>
+                <p class="text-gray-400 max-w-2xl mx-auto">
+                    A comprehensive toolkit built over years of professional development
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+                <!-- Backend -->
+                <div class="card-hover bg-dark-700/30 rounded-xl p-4 sm:p-6 fade-in">
+                    <div class="flex items-center space-x-3 mb-4">
+                        <div class="w-10 h-10 bg-accent-blue/20 rounded-lg flex items-center justify-center">
+                            <svg class="w-5 h-5 text-accent-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 00-2 2v4a2 2 0 002 2h14a2 2 0 002-2v-4a2 2 0 00-2-2m-2-4h.01M17 16h.01"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-lg font-semibold">Backend</h3>
+                    </div>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="skill-badge px-3 py-1 bg-dark-600 rounded-full text-sm text-gray-300">PHP</span>
+                        <span class="skill-badge px-3 py-1 bg-dark-600 rounded-full text-sm text-gray-300">Laravel</span>
+                        <span class="skill-badge px-3 py-1 bg-dark-600 rounded-full text-sm text-gray-300">MySQL</span>
+                        <span class="skill-badge px-3 py-1 bg-dark-600 rounded-full text-sm text-gray-300">PostgreSQL</span>
+                        <span class="skill-badge px-3 py-1 bg-dark-600 rounded-full text-sm text-gray-300">Redis</span>
+                        <span class="skill-badge px-3 py-1 bg-dark-600 rounded-full text-sm text-gray-300">REST APIs</span>
+                    </div>
+                </div>
+
+                <!-- Frontend -->
+                <div class="card-hover bg-dark-700/30 rounded-xl p-4 sm:p-6 fade-in">
+                    <div class="flex items-center space-x-3 mb-4">
+                        <div class="w-10 h-10 bg-accent-purple/20 rounded-lg flex items-center justify-center">
+                            <svg class="w-5 h-5 text-accent-purple" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-lg font-semibold">Frontend</h3>
+                    </div>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="skill-badge px-3 py-1 bg-dark-600 rounded-full text-sm text-gray-300">JavaScript</span>
+                        <span class="skill-badge px-3 py-1 bg-dark-600 rounded-full text-sm text-gray-300">Vue.js</span>
+                        <span class="skill-badge px-3 py-1 bg-dark-600 rounded-full text-sm text-gray-300">React</span>
+                        <span class="skill-badge px-3 py-1 bg-dark-600 rounded-full text-sm text-gray-300">Tailwind CSS</span>
+                        <span class="skill-badge px-3 py-1 bg-dark-600 rounded-full text-sm text-gray-300">TypeScript</span>
+                        <span class="skill-badge px-3 py-1 bg-dark-600 rounded-full text-sm text-gray-300">Alpine.js</span>
+                    </div>
+                </div>
+
+                <!-- DevOps & Cloud -->
+                <div class="card-hover bg-dark-700/30 rounded-xl p-4 sm:p-6 fade-in">
+                    <div class="flex items-center space-x-3 mb-4">
+                        <div class="w-10 h-10 bg-accent-red/20 rounded-lg flex items-center justify-center">
+                            <svg class="w-5 h-5 text-accent-red" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-lg font-semibold">DevOps & Cloud</h3>
+                    </div>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="skill-badge px-3 py-1 bg-dark-600 rounded-full text-sm text-gray-300">AWS</span>
+                        <span class="skill-badge px-3 py-1 bg-dark-600 rounded-full text-sm text-gray-300">Docker</span>
+                        <span class="skill-badge px-3 py-1 bg-dark-600 rounded-full text-sm text-gray-300">Linux</span>
+                        <span class="skill-badge px-3 py-1 bg-dark-600 rounded-full text-sm text-gray-300">CI/CD</span>
+                        <span class="skill-badge px-3 py-1 bg-dark-600 rounded-full text-sm text-gray-300">Nginx</span>
+                        <span class="skill-badge px-3 py-1 bg-dark-600 rounded-full text-sm text-gray-300">GitHub Actions</span>
+                    </div>
+                </div>
+
+                <!-- Video & Streaming -->
+                <div class="card-hover bg-dark-700/30 rounded-xl p-4 sm:p-6 fade-in">
+                    <div class="flex items-center space-x-3 mb-4">
+                        <div class="w-10 h-10 bg-green-500/20 rounded-lg flex items-center justify-center">
+                            <svg class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-lg font-semibold">Video & Streaming</h3>
+                    </div>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="skill-badge px-3 py-1 bg-dark-600 rounded-full text-sm text-gray-300">RTMP</span>
+                        <span class="skill-badge px-3 py-1 bg-dark-600 rounded-full text-sm text-gray-300">HLS</span>
+                        <span class="skill-badge px-3 py-1 bg-dark-600 rounded-full text-sm text-gray-300">FFmpeg</span>
+                        <span class="skill-badge px-3 py-1 bg-dark-600 rounded-full text-sm text-gray-300">Nimble Streamer</span>
+                        <span class="skill-badge px-3 py-1 bg-dark-600 rounded-full text-sm text-gray-300">SRT</span>
+                        <span class="skill-badge px-3 py-1 bg-dark-600 rounded-full text-sm text-gray-300">NDI</span>
+                    </div>
+                </div>
+
+                <!-- AI & Tools -->
+                <div class="card-hover bg-dark-700/30 rounded-xl p-4 sm:p-6 fade-in">
+                    <div class="flex items-center space-x-3 mb-4">
+                        <div class="w-10 h-10 bg-yellow-500/20 rounded-lg flex items-center justify-center">
+                            <svg class="w-5 h-5 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-lg font-semibold">AI & Tools</h3>
+                    </div>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="skill-badge px-3 py-1 bg-dark-600 rounded-full text-sm text-gray-300">AI Integration</span>
+                        <span class="skill-badge px-3 py-1 bg-dark-600 rounded-full text-sm text-gray-300">Claude</span>
+                        <span class="skill-badge px-3 py-1 bg-dark-600 rounded-full text-sm text-gray-300">OpenAI</span>
+                        <span class="skill-badge px-3 py-1 bg-dark-600 rounded-full text-sm text-gray-300">Git</span>
+                        <span class="skill-badge px-3 py-1 bg-dark-600 rounded-full text-sm text-gray-300">PHPStorm</span>
+                        <span class="skill-badge px-3 py-1 bg-dark-600 rounded-full text-sm text-gray-300">VS Code</span>
+                    </div>
+                </div>
+
+                <!-- Server & Systems -->
+                <div class="card-hover bg-dark-700/30 rounded-xl p-4 sm:p-6 fade-in">
+                    <div class="flex items-center space-x-3 mb-4">
+                        <div class="w-10 h-10 bg-cyan-500/20 rounded-lg flex items-center justify-center">
+                            <svg class="w-5 h-5 text-cyan-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-lg font-semibold">Infrastructure</h3>
+                    </div>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="skill-badge px-3 py-1 bg-dark-600 rounded-full text-sm text-gray-300">Docker</span>
+                        <span class="skill-badge px-3 py-1 bg-dark-600 rounded-full text-sm text-gray-300">Proxmox</span>
+                        <span class="skill-badge px-3 py-1 bg-dark-600 rounded-full text-sm text-gray-300">VMs</span>
+                        <span class="skill-badge px-3 py-1 bg-dark-600 rounded-full text-sm text-gray-300">Ubuntu</span>
+                        <span class="skill-badge px-3 py-1 bg-dark-600 rounded-full text-sm text-gray-300">Forge</span>
+                        <span class="skill-badge px-3 py-1 bg-dark-600 rounded-full text-sm text-gray-300">Envoyer</span>
+                    </div>
+                </div>
+
+                <!-- Creative Tools -->
+                <div class="card-hover bg-dark-700/30 rounded-xl p-4 sm:p-6 fade-in">
+                    <div class="flex items-center space-x-3 mb-4">
+                        <div class="w-10 h-10 bg-pink-500/20 rounded-lg flex items-center justify-center">
+                            <svg class="w-5 h-5 text-pink-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 4V2a1 1 0 011-1h8a1 1 0 011 1v2m0 0h4a1 1 0 011 1v3a1 1 0 01-1 1h-1m-4-5v5m0 0H8m4 0v9m-4-9v9m8-9v9M4 8h1m14 0h1M5 8v12a1 1 0 001 1h12a1 1 0 001-1V8"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-lg font-semibold">Creative Tools</h3>
+                    </div>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="skill-badge px-3 py-1 bg-dark-600 rounded-full text-sm text-gray-300">Premiere Pro</span>
+                        <span class="skill-badge px-3 py-1 bg-dark-600 rounded-full text-sm text-gray-300">After Effects</span>
+                        <span class="skill-badge px-3 py-1 bg-dark-600 rounded-full text-sm text-gray-300">Photoshop</span>
+                        <span class="skill-badge px-3 py-1 bg-dark-600 rounded-full text-sm text-gray-300">Video Editing</span>
+                        <span class="skill-badge px-3 py-1 bg-dark-600 rounded-full text-sm text-gray-300">Motion Graphics</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects" class="py-12 sm:py-24 relative z-10 parallax-section">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="section-divider mb-8 sm:mb-16"></div>
+
+            <div class="text-center mb-8 sm:mb-16 fade-in">
+                <h2 class="text-3xl sm:text-4xl font-bold mb-4">
+                    <span class="text-accent-blue font-mono text-lg block mb-2">03.</span>
+                    Featured Projects
+                </h2>
+                <p class="text-gray-400 max-w-2xl mx-auto">
+                    Open source contributions and personal projects
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-8">
+                <!-- Laravel Nimble Package -->
+                <div class="card-hover gradient-border rounded-xl overflow-hidden fade-in">
+                    <div class="p-6">
+                        <div class="flex items-start justify-between mb-4">
+                            <div class="w-12 h-12 bg-accent-blue/20 rounded-lg flex items-center justify-center">
+                                <svg class="w-6 h-6 text-accent-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4"/>
+                                </svg>
+                            </div>
+                            <a href="https://github.com/alexhackney/lara-nimble" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white transition-colors">
+                                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                                </svg>
+                            </a>
+                        </div>
+                        <h3 class="text-xl font-semibold mb-2">Laravel Nimble</h3>
+                        <p class="text-gray-400 mb-4">
+                            A comprehensive Laravel package for seamless integration with Nimble Streamer API.
+                            Manage streams, DVR, sessions, restreaming, and more with a clean, expressive interface.
+                        </p>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="px-2 py-1 bg-dark-600 rounded text-xs text-gray-400">PHP 8.1+</span>
+                            <span class="px-2 py-1 bg-dark-600 rounded text-xs text-gray-400">Laravel 10/11</span>
+                            <span class="px-2 py-1 bg-dark-600 rounded text-xs text-gray-400">RTMP</span>
+                            <span class="px-2 py-1 bg-dark-600 rounded text-xs text-gray-400">HLS</span>
+                            <span class="px-2 py-1 bg-dark-600 rounded text-xs text-gray-400">SRT</span>
+                        </div>
+                        <div class="flex items-center space-x-4 text-sm text-gray-500">
+                            <span class="flex items-center space-x-1">
+                                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z"/>
+                                </svg>
+                                <span>1 star</span>
+                            </span>
+                            <span class="flex items-center space-x-1">
+                                <span class="w-3 h-3 rounded-full bg-purple-500"></span>
+                                <span>PHP</span>
+                            </span>
+                            <span>127 tests</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Laravel Pint Action Fork -->
+                <div class="card-hover gradient-border rounded-xl overflow-hidden fade-in">
+                    <div class="p-6">
+                        <div class="flex items-start justify-between mb-4">
+                            <div class="w-12 h-12 bg-accent-purple/20 rounded-lg flex items-center justify-center">
+                                <svg class="w-6 h-6 text-accent-purple" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                </svg>
+                            </div>
+                            <a href="https://github.com/alexhackney/laravel-pint-action" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white transition-colors">
+                                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                                </svg>
+                            </a>
+                        </div>
+                        <h3 class="text-xl font-semibold mb-2">Laravel Pint Action</h3>
+                        <p class="text-gray-400 mb-4">
+                            GitHub Action for Laravel Pint - automatically format your PHP code using
+                            Laravel's opinionated code style fixer in your CI/CD pipeline.
+                        </p>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="px-2 py-1 bg-dark-600 rounded text-xs text-gray-400">GitHub Actions</span>
+                            <span class="px-2 py-1 bg-dark-600 rounded text-xs text-gray-400">Shell</span>
+                            <span class="px-2 py-1 bg-dark-600 rounded text-xs text-gray-400">CI/CD</span>
+                            <span class="px-2 py-1 bg-dark-600 rounded text-xs text-gray-400">Code Quality</span>
+                        </div>
+                        <div class="flex items-center space-x-4 text-sm text-gray-500">
+                            <span class="flex items-center space-x-1">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/>
+                                </svg>
+                                <span>Forked</span>
+                            </span>
+                            <span class="flex items-center space-x-1">
+                                <span class="w-3 h-3 rounded-full bg-green-500"></span>
+                                <span>Shell</span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Video Streaming Projects Placeholder -->
+                <div class="card-hover bg-dark-700/30 rounded-xl p-6 md:col-span-2 fade-in">
+                    <div class="flex items-center space-x-4 mb-4">
+                        <div class="w-12 h-12 bg-green-500/20 rounded-lg flex items-center justify-center">
+                            <svg class="w-6 h-6 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-semibold">Video Streaming & Production</h3>
+                            <p class="text-gray-500 text-sm">Professional Experience</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-400 mb-4">
+                        Extensive experience building and managing video streaming infrastructure including live streaming platforms,
+                        VOD systems, transcoding pipelines, and real-time video production tools. Worked with protocols like
+                        RTMP, HLS, SRT, and NDI to deliver content at scale.
+                    </p>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="px-3 py-1 bg-dark-600 rounded-full text-sm text-gray-400">Live Streaming</span>
+                        <span class="px-3 py-1 bg-dark-600 rounded-full text-sm text-gray-400">VOD</span>
+                        <span class="px-3 py-1 bg-dark-600 rounded-full text-sm text-gray-400">Transcoding</span>
+                        <span class="px-3 py-1 bg-dark-600 rounded-full text-sm text-gray-400">CDN Integration</span>
+                        <span class="px-3 py-1 bg-dark-600 rounded-full text-sm text-gray-400">Real-time Processing</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- View More on GitHub -->
+            <div class="text-center mt-12 fade-in">
+                <a href="https://github.com/alexhackney" target="_blank" rel="noopener noreferrer"
+                   class="inline-flex items-center space-x-2 px-6 py-3 border border-accent-blue text-accent-blue hover:bg-accent-blue hover:text-white rounded-lg transition-all">
+                    <span>View More on GitHub</span>
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Experience Section -->
+    <section id="experience" class="py-12 sm:py-24 relative z-10 parallax-section">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="section-divider mb-8 sm:mb-16"></div>
+
+            <div class="text-center mb-8 sm:mb-16 fade-in">
+                <h2 class="text-3xl sm:text-4xl font-bold mb-4">
+                    <span class="text-accent-blue font-mono text-lg block mb-2">04.</span>
+                    Experience
+                </h2>
+                <p class="text-gray-400 max-w-2xl mx-auto">
+                    Professional journey in software development
+                </p>
+            </div>
+
+            <!-- Experience Timeline -->
+            <div class="relative max-w-3xl mx-auto">
+                <!-- Timeline Line -->
+                <div class="absolute left-0 md:left-1/2 w-px h-full bg-gradient-to-b from-accent-blue via-accent-purple to-accent-red transform md:-translate-x-1/2"></div>
+
+                <!-- Experience Items -->
+                <div class="space-y-12">
+                    <!-- Application Development -->
+                    <div class="relative flex flex-col md:flex-row md:items-center fade-in">
+                        <div class="flex-1 md:pr-8 md:text-right mb-4 md:mb-0">
+                            <div class="bg-dark-700/30 rounded-xl p-6 card-hover ml-8 md:ml-0">
+                                <h3 class="text-lg font-semibold text-white">Application Development</h3>
+                                <p class="text-accent-blue text-sm mb-2">Web & Mobile</p>
+                                <p class="text-gray-400 text-sm">
+                                    Developed custom web applications with Laravel, Vue.js, and React.
+                                    Built multiple React Native mobile apps. Created RESTful APIs,
+                                    implemented complex business logic, and delivered user-friendly interfaces.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="absolute left-0 md:left-1/2 w-4 h-4 bg-accent-blue rounded-full transform md:-translate-x-1/2 border-4 border-dark-900"></div>
+                        <div class="flex-1 md:pl-8 hidden md:block"></div>
+                    </div>
+
+                    <!-- Video Production & Streaming -->
+                    <div class="relative flex flex-col md:flex-row md:items-center fade-in">
+                        <div class="flex-1 md:pr-8 hidden md:block"></div>
+                        <div class="absolute left-0 md:left-1/2 w-4 h-4 bg-accent-purple rounded-full transform md:-translate-x-1/2 border-4 border-dark-900"></div>
+                        <div class="flex-1 md:pl-8">
+                            <div class="bg-dark-700/30 rounded-xl p-6 card-hover ml-8 md:ml-0">
+                                <h3 class="text-lg font-semibold text-white">Video Production & Streaming</h3>
+                                <p class="text-accent-purple text-sm mb-2">Since the Late 90s</p>
+                                <p class="text-gray-400 text-sm">
+                                    Managed thousands of live streams and large-scale productions with
+                                    multi-camera setups, multiple software systems, and diverse technologies.
+                                    Built streaming platforms handling live broadcasts, VOD, transcoding,
+                                    and real-time production tools.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Cloud Communications & PBX -->
+                    <div class="relative flex flex-col md:flex-row md:items-center fade-in">
+                        <div class="flex-1 md:pr-8 md:text-right mb-4 md:mb-0">
+                            <div class="bg-dark-700/30 rounded-xl p-6 card-hover ml-8 md:ml-0">
+                                <h3 class="text-lg font-semibold text-white">Cloud Communications & PBX</h3>
+                                <p class="text-accent-red text-sm mb-2">VoIP & Telephony Systems</p>
+                                <p class="text-gray-400 text-sm">
+                                    Built and managed cloud and on-premise PBX systems. Developed a
+                                    caller ID system used by thousands of people. Experience with
+                                    VoIP protocols, SIP, and telecommunications infrastructure.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="absolute left-0 md:left-1/2 w-4 h-4 bg-accent-red rounded-full transform md:-translate-x-1/2 border-4 border-dark-900"></div>
+                        <div class="flex-1 md:pl-8 hidden md:block"></div>
+                    </div>
+
+                    <!-- DevOps & Server Administration -->
+                    <div class="relative flex flex-col md:flex-row md:items-center fade-in">
+                        <div class="flex-1 md:pr-8 hidden md:block"></div>
+                        <div class="absolute left-0 md:left-1/2 w-4 h-4 bg-green-500 rounded-full transform md:-translate-x-1/2 border-4 border-dark-900"></div>
+                        <div class="flex-1 md:pl-8">
+                            <div class="bg-dark-700/30 rounded-xl p-6 card-hover ml-8 md:ml-0">
+                                <h3 class="text-lg font-semibold text-white">DevOps & Server Administration</h3>
+                                <p class="text-green-400 text-sm mb-2">AWS & Infrastructure</p>
+                                <p class="text-gray-400 text-sm">
+                                    Managed cloud infrastructure on AWS, implemented CI/CD pipelines,
+                                    and maintained high-availability systems. Experience with Docker,
+                                    Linux server administration, and automated deployments.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- GitHub Achievements -->
+            <div class="mt-16 text-center fade-in">
+                <h3 class="text-xl font-semibold mb-6 text-gray-300">GitHub Achievements</h3>
+                <div class="flex flex-wrap justify-center gap-4">
+                    <div class="px-4 py-2 bg-dark-700/30 rounded-lg border border-white/5">
+                        <span class="text-yellow-500">Pull Shark</span>
+                        <span class="text-gray-500 text-sm ml-1">x4</span>
+                    </div>
+                    <div class="px-4 py-2 bg-dark-700/30 rounded-lg border border-white/5">
+                        <span class="text-purple-500">Pair Extraordinaire</span>
+                        <span class="text-gray-500 text-sm ml-1">x4</span>
+                    </div>
+                    <div class="px-4 py-2 bg-dark-700/30 rounded-lg border border-white/5">
+                        <span class="text-cyan-500">Arctic Code Vault</span>
+                    </div>
+                    <div class="px-4 py-2 bg-dark-700/30 rounded-lg border border-white/5">
+                        <span class="text-pink-500">Public Sponsor</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-12 sm:py-24 relative z-10">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="section-divider mb-8 sm:mb-16"></div>
+
+            <div class="max-w-2xl mx-auto text-center fade-in">
+                <h2 class="text-3xl sm:text-4xl font-bold mb-4">
+                    <span class="text-accent-blue font-mono text-lg block mb-2">05.</span>
+                    Get In Touch
+                </h2>
+                <p class="text-gray-400 mb-6 sm:mb-12">
+                    I'm currently open to new opportunities. Whether you have a question,
+                    a project idea, or just want to say hello, feel free to reach out!
+                </p>
+
+                <!-- Contact Cards -->
+                <div class="grid sm:grid-cols-2 gap-6 mb-6 sm:mb-12">
+                    <!-- Email -->
+                    <a href="mailto:alex@alexhackney.com" class="card-hover bg-dark-700/30 rounded-xl p-6 flex items-center space-x-4">
+                        <div class="w-12 h-12 bg-accent-blue/20 rounded-lg flex items-center justify-center flex-shrink-0">
+                            <svg class="w-6 h-6 text-accent-blue" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                            </svg>
+                        </div>
+                        <div class="text-left">
+                            <div class="text-sm text-gray-500">Email</div>
+                            <div class="text-white">alex@alexhackney.com</div>
+                        </div>
+                    </a>
+
+                    <!-- Location -->
+                    <div class="bg-dark-700/30 rounded-xl p-6 flex items-center space-x-4">
+                        <div class="w-12 h-12 bg-accent-purple/20 rounded-lg flex items-center justify-center flex-shrink-0">
+                            <svg class="w-6 h-6 text-accent-purple" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+                            </svg>
+                        </div>
+                        <div class="text-left">
+                            <div class="text-sm text-gray-500">Location</div>
+                            <div class="text-white">Clearwater, FL</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Social Links -->
+                <div class="flex justify-center space-x-6">
+                    <a href="https://github.com/alexhackney" target="_blank" rel="noopener noreferrer"
+                       class="w-12 h-12 bg-dark-700/50 hover:bg-dark-600 rounded-lg flex items-center justify-center text-gray-400 hover:text-white transition-all">
+                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                        </svg>
+                    </a>
+                    <a href="https://linkedin.com/in/ahackney" target="_blank" rel="noopener noreferrer"
+                       class="w-12 h-12 bg-dark-700/50 hover:bg-dark-600 rounded-lg flex items-center justify-center text-gray-400 hover:text-white transition-all">
+                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-8 border-t border-white/5 relative z-10">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row items-center justify-between text-gray-500 text-sm">
+                <p>Designed & Built by Alex Hackney</p>
+                <p class="mt-2 md:mt-0">
+                    <span class="font-mono">&lt;/&gt;</span> with Tailwind & Coke Zero
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        // Particle Animation Canvas
+        const canvas = document.getElementById('particles-canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        let animationId;
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+
+        class Particle {
+            constructor() {
+                this.reset();
+            }
+
+            reset() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 2 + 0.5;
+                this.speedX = (Math.random() - 0.5) * 0.5;
+                this.speedY = (Math.random() - 0.5) * 0.5;
+                this.opacity = Math.random() * 0.5 + 0.1;
+                this.color = Math.random() > 0.5 ? '59, 130, 246' : '139, 92, 246';
+            }
+
+            update() {
+                this.x += this.speedX;
+                this.y += this.speedY;
+
+                if (this.x < 0 || this.x > canvas.width || this.y < 0 || this.y > canvas.height) {
+                    this.reset();
+                }
+            }
+
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(${this.color}, ${this.opacity})`;
+                ctx.fill();
+            }
+        }
+
+        function initParticles() {
+            particles = [];
+            const particleCount = Math.floor((canvas.width * canvas.height) / 15000);
+            for (let i = 0; i < particleCount; i++) {
+                particles.push(new Particle());
+            }
+        }
+
+        function connectParticles() {
+            for (let i = 0; i < particles.length; i++) {
+                for (let j = i + 1; j < particles.length; j++) {
+                    const dx = particles[i].x - particles[j].x;
+                    const dy = particles[i].y - particles[j].y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+
+                    if (distance < 150) {
+                        const opacity = (1 - distance / 150) * 0.15;
+                        ctx.beginPath();
+                        ctx.strokeStyle = `rgba(59, 130, 246, ${opacity})`;
+                        ctx.lineWidth = 0.5;
+                        ctx.moveTo(particles[i].x, particles[i].y);
+                        ctx.lineTo(particles[j].x, particles[j].y);
+                        ctx.stroke();
+                    }
+                }
+            }
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            particles.forEach(particle => {
+                particle.update();
+                particle.draw();
+            });
+
+            connectParticles();
+            animationId = requestAnimationFrame(animate);
+        }
+
+        // Initialize canvas
+        resizeCanvas();
+        initParticles();
+        animate();
+
+        window.addEventListener('resize', () => {
+            resizeCanvas();
+            initParticles();
+        });
+
+        // Mobile Navigation
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileNav = document.getElementById('mobile-nav');
+        const mobileNavClose = document.getElementById('mobile-nav-close');
+        const mobileNavLinks = document.querySelectorAll('.mobile-nav-link');
+
+        function openMobileNav() {
+            mobileNav.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeMobileNav() {
+            mobileNav.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        mobileMenuBtn.addEventListener('click', openMobileNav);
+        mobileNavClose.addEventListener('click', closeMobileNav);
+        mobileNavLinks.forEach(link => link.addEventListener('click', closeMobileNav));
+
+        // Parallax Effect - only apply to hero section for subtle effect
+        let ticking = false;
+        window.addEventListener('scroll', () => {
+            if (!ticking) {
+                window.requestAnimationFrame(() => {
+                    const scrolled = window.pageYOffset;
+                    const hero = document.getElementById('home');
+                    if (hero && scrolled < window.innerHeight) {
+                        hero.style.transform = `translateY(${scrolled * 0.3}px)`;
+                        hero.style.opacity = 1 - (scrolled / window.innerHeight) * 0.3;
+                    }
+                    ticking = false;
+                });
+                ticking = true;
+            }
+        });
+
+        // Fade In Animation on Scroll
+        const fadeElements = document.querySelectorAll('.fade-in');
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        fadeElements.forEach(el => observer.observe(el));
+
+        // Typing Effect
+        const typedText = document.getElementById('typed-text');
+        const phrases = [
+            'Full Stack Developer',
+            'Laravel Expert',
+            'Vue.js Developer',
+            'React Developer',
+            'DevOps Engineer',
+            'Video Streaming Specialist',
+            'Telecom Expert',
+            'Proud Father',
+            'Movie Enthusiast'
+        ];
+        let phraseIndex = 0;
+        let charIndex = 0;
+        let isDeleting = false;
+        let typingSpeed = 100;
+
+        function typeEffect() {
+            const currentPhrase = phrases[phraseIndex];
+
+            if (isDeleting) {
+                typedText.textContent = currentPhrase.substring(0, charIndex - 1);
+                charIndex--;
+                typingSpeed = 50;
+            } else {
+                typedText.textContent = currentPhrase.substring(0, charIndex + 1);
+                charIndex++;
+                typingSpeed = 100;
+            }
+
+            if (!isDeleting && charIndex === currentPhrase.length) {
+                isDeleting = true;
+                typingSpeed = 2000;
+            } else if (isDeleting && charIndex === 0) {
+                isDeleting = false;
+                phraseIndex = (phraseIndex + 1) % phrases.length;
+                typingSpeed = 500;
+            }
+
+            setTimeout(typeEffect, typingSpeed);
+        }
+
+        setTimeout(typeEffect, 1000);
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    const headerOffset = 80;
+                    const elementPosition = target.getBoundingClientRect().top;
+                    const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+
+                    window.scrollTo({
+                        top: offsetPosition,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        // Active navigation highlighting
+        const sections = document.querySelectorAll('section[id]');
+        const navLinks = document.querySelectorAll('nav a[href^="#"]');
+
+        window.addEventListener('scroll', () => {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                if (window.pageYOffset >= sectionTop - 200) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navLinks.forEach(link => {
+                link.classList.remove('text-white');
+                link.classList.add('text-gray-400');
+                if (link.getAttribute('href') === `#${current}`) {
+                    link.classList.remove('text-gray-400');
+                    link.classList.add('text-white');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
