@@ -1,0 +1,1068 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SMS Comms API Migration Proposal</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;600;700;800;900&family=Open+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  :root {
+    --bg: #080c14;
+    --surface: #0d1422;
+    --surface2: #111927;
+    --border: rgba(255,255,255,0.06);
+    --accent: #00e5a0;
+    --accent2: #0ea5e9;
+    --accent3: #f59e0b;
+    --danger: #ef4444;
+    --text: #e2e8f0;
+    --muted: #64748b;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Open Sans', sans-serif;
+    overflow-x: hidden;
+  }
+  h1,h2,h3,h4 { font-family: 'Raleway', sans-serif; }
+
+  /* Canvas background */
+  #bg-canvas {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.4;
+  }
+
+  /* Grid overlay */
+  .grid-overlay {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+    z-index: 0;
+    background-image:
+      linear-gradient(rgba(0,229,160,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,229,160,0.03) 1px, transparent 1px);
+    background-size: 60px 60px;
+  }
+
+  .content { position: relative; z-index: 1; }
+
+  /* Glow effects */
+  .glow-accent { box-shadow: 0 0 30px rgba(0,229,160,0.15), 0 0 60px rgba(0,229,160,0.05); }
+  .glow-blue { box-shadow: 0 0 30px rgba(14,165,233,0.15), 0 0 60px rgba(14,165,233,0.05); }
+  .text-accent { color: var(--accent); }
+  .text-blue { color: var(--accent2); }
+  .text-amber { color: var(--accent3); }
+  .text-danger { color: var(--danger); }
+  .text-muted { color: var(--muted); }
+
+  /* Cards */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    transition: border-color 0.3s, transform 0.3s;
+  }
+  .card:hover { border-color: rgba(0,229,160,0.2); transform: translateY(-2px); }
+
+  /* Section label */
+  .section-label {
+    font-family: 'Open Sans', sans-serif;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--accent);
+    opacity: 0.8;
+  }
+
+  /* Divider */
+  .divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(0,229,160,0.3), transparent);
+    margin: 0 auto;
+  }
+
+  /* Cost bar animation */
+  .cost-bar {
+    height: 6px;
+    border-radius: 3px;
+    transform-origin: left;
+    transition: width 1.5s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  /* Pipeline step */
+  .pipeline-step {
+    position: relative;
+  }
+  .pipeline-step::after {
+    content: '';
+    position: absolute;
+    right: -24px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 20px;
+    height: 2px;
+    background: linear-gradient(90deg, var(--accent), transparent);
+  }
+  .pipeline-step:last-child::after { display: none; }
+
+  /* Animated border */
+  .animated-border {
+    position: relative;
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  .animated-border::before {
+    content: '';
+    position: absolute;
+    inset: -1px;
+    background: conic-gradient(from 0deg, transparent 0deg, var(--accent) 60deg, transparent 120deg);
+    border-radius: 13px;
+    animation: spin 4s linear infinite;
+    z-index: -1;
+  }
+  .animated-border::after {
+    content: '';
+    position: absolute;
+    inset: 1px;
+    background: var(--surface);
+    border-radius: 11px;
+    z-index: -1;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* Pulse dot */
+  .pulse-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 0 0 rgba(0,229,160,0.4);
+    animation: pulse 2s ease-out infinite;
+  }
+  @keyframes pulse {
+    0% { box-shadow: 0 0 0 0 rgba(0,229,160,0.4); }
+    70% { box-shadow: 0 0 0 10px rgba(0,229,160,0); }
+    100% { box-shadow: 0 0 0 0 rgba(0,229,160,0); }
+  }
+
+  /* Number counter */
+  .counter { font-family: 'Raleway', sans-serif; }
+
+  /* Flow arrow */
+  .flow-arrow {
+    color: var(--accent);
+    font-size: 20px;
+    animation: flow 1.5s ease-in-out infinite;
+  }
+  @keyframes flow {
+    0%,100% { transform: translateX(0); opacity: 0.6; }
+    50% { transform: translateX(4px); opacity: 1; }
+  }
+
+  /* Fade in on scroll */
+  .reveal {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Scanline overlay */
+  .scanline {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+    z-index: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(0,0,0,0.03) 2px,
+      rgba(0,0,0,0.03) 4px
+    );
+  }
+
+  /* Tag badge */
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 3px 10px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-family: 'Open Sans', sans-serif;
+    letter-spacing: 0.05em;
+  }
+  .badge-green { background: rgba(0,229,160,0.1); color: var(--accent); border: 1px solid rgba(0,229,160,0.2); }
+  .badge-blue { background: rgba(14,165,233,0.1); color: var(--accent2); border: 1px solid rgba(14,165,233,0.2); }
+  .badge-red { background: rgba(239,68,68,0.1); color: var(--danger); border: 1px solid rgba(239,68,68,0.2); }
+  .badge-amber { background: rgba(245,158,11,0.1); color: var(--accent3); border: 1px solid rgba(245,158,11,0.2); }
+
+  /* Table */
+  .data-table { width: 100%; border-collapse: collapse; }
+  .data-table th {
+    text-align: left;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding: 10px 16px;
+    border-bottom: 1px solid var(--border);
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 400;
+  }
+  .data-table td {
+    padding: 12px 16px;
+    font-size: 13px;
+    border-bottom: 1px solid var(--border);
+    font-family: 'Open Sans', sans-serif;
+  }
+  .data-table tr:last-child td { border-bottom: none; }
+  .data-table tr:hover td { background: rgba(255,255,255,0.02); }
+  .data-table .total-row td {
+    border-top: 1px solid rgba(0,229,160,0.2);
+    color: var(--accent);
+    font-family: 'Raleway', sans-serif;
+    font-weight: 700;
+  }
+
+  /* Arch box */
+  .arch-box {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 12px;
+    font-family: 'Open Sans', sans-serif;
+    background: var(--surface2);
+    transition: border-color 0.3s;
+  }
+
+  /* Floating orbs */
+  .orb {
+    position: fixed;
+    border-radius: 50%;
+    filter: blur(80px);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* Waterfall bar */
+  .wf-bar {
+    transition: all 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+</style>
+</head>
+<body>
+
+<canvas id="bg-canvas"></canvas>
+<div class="grid-overlay"></div>
+<div class="scanline"></div>
+
+<!-- Floating orbs -->
+<div class="orb" style="width:500px;height:500px;background:rgba(0,229,160,0.04);top:-100px;right:-100px;animation:orbFloat1 12s ease-in-out infinite;"></div>
+<div class="orb" style="width:400px;height:400px;background:rgba(14,165,233,0.04);bottom:20%;left:-100px;animation:orbFloat2 15s ease-in-out infinite;"></div>
+
+<style>
+@keyframes orbFloat1 { 0%,100%{transform:translate(0,0)} 50%{transform:translate(-30px,40px)} }
+@keyframes orbFloat2 { 0%,100%{transform:translate(0,0)} 50%{transform:translate(30px,-40px)} }
+</style>
+
+<div class="content max-w-5xl mx-auto px-6 py-16">
+
+  <!-- HERO -->
+  <section class="mb-20 reveal">
+    <div class="flex items-center gap-3 mb-6">
+      <div class="pulse-dot"></div>
+      <span class="section-label">Infrastructure Proposal / March 2026</span>
+    </div>
+    <h1 style="font-size:clamp(2.2rem,5vw,3.8rem);line-height:1.1;font-weight:800;letter-spacing:-0.02em;" class="mb-6">
+      SMS Comms API<br>
+      <span class="text-accent">Fargate</span> <span style="color:var(--muted)">to</span> <span class="text-blue">EC2</span>
+    </h1>
+    <p style="max-width:580px;line-height:1.7;color:var(--muted);font-size:14px;" class="mb-8">
+      One Fargate task hitting 100% CPU with no queue workers, 20-minute deploys, and $308/mo in overhead. This proposal cuts that to $70/mo, unlocks background workers, and gives us full control over our own infrastructure.
+    </p>
+
+    <!-- Hero stats row -->
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <div class="card p-5">
+        <div class="text-muted text-xs mb-2 uppercase tracking-widest">Current Cost</div>
+        <div class="counter text-3xl font-bold text-danger" data-target="308">$0</div>
+        <div class="text-muted text-xs mt-1">per month</div>
+      </div>
+      <div class="card p-5 glow-accent" style="border-color:rgba(0,229,160,0.2);">
+        <div class="text-muted text-xs mb-2 uppercase tracking-widest">Target Cost</div>
+        <div class="counter text-3xl font-bold text-accent" data-target="70">$0</div>
+        <div class="text-muted text-xs mt-1">per month</div>
+      </div>
+      <div class="card p-5">
+        <div class="text-muted text-xs mb-2 uppercase tracking-widest">Monthly Savings</div>
+        <div class="counter text-3xl font-bold text-blue" data-target="238">$0</div>
+        <div class="text-muted text-xs mt-1">saved / month</div>
+      </div>
+      <div class="card p-5">
+        <div class="text-muted text-xs mb-2 uppercase tracking-widest">Deploy Time</div>
+        <div class="text-3xl font-bold" style="font-family:'Raleway',sans-serif;">
+          <span class="text-accent">&lt;2</span><span class="text-muted text-lg"> min</span>
+        </div>
+        <div class="text-muted text-xs mt-1">was 15-20 min</div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider mb-20"></div>
+
+  <!-- PROBLEMS -->
+  <section class="mb-20 reveal">
+    <div class="section-label mb-4">Current State</div>
+    <h2 style="font-size:1.8rem;font-weight:700;margin-bottom:24px;">Why Fargate Is Failing Us</h2>
+    <div class="grid md:grid-cols-2 gap-4">
+      <!-- Problem cards -->
+      <div class="card p-6 flex gap-4">
+        <div style="width:36px;height:36px;border-radius:8px;background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.2);flex-shrink:0;display:flex;align-items:center;justify-content:center;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        </div>
+        <div>
+          <div class="font-bold mb-1" style="font-family:'Raleway',sans-serif;font-size:14px;">No SSH Access</div>
+          <div class="text-muted" style="font-size:13px;line-height:1.6;">Debugging means parsing CloudWatch logs with zero ability to run commands or inspect live state.</div>
+        </div>
+      </div>
+
+      <div class="card p-6 flex gap-4">
+        <div style="width:36px;height:36px;border-radius:8px;background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.2);flex-shrink:0;display:flex;align-items:center;justify-content:center;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        </div>
+        <div>
+          <div class="font-bold mb-1" style="font-family:'Raleway',sans-serif;font-size:14px;">15-20 Minute Deploys</div>
+          <div class="text-muted" style="font-size:13px;line-height:1.6;">Every deploy requires a container build, ECR push, new task definition, and ECS drain cycle.</div>
+        </div>
+      </div>
+
+      <div class="card p-6 flex gap-4">
+        <div style="width:36px;height:36px;border-radius:8px;background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.2);flex-shrink:0;display:flex;align-items:center;justify-content:center;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+        </div>
+        <div>
+          <div class="font-bold mb-1" style="font-family:'Raleway',sans-serif;font-size:14px;">Queue Workers Don't Work</div>
+          <div class="text-muted" style="font-size:13px;line-height:1.6;">ECS kills containers mid-deploy. In-flight jobs are dropped. Everything runs synchronously, causing 100% CPU spikes.</div>
+        </div>
+      </div>
+
+      <div class="card p-6 flex gap-4">
+        <div style="width:36px;height:36px;border-radius:8px;background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.2);flex-shrink:0;display:flex;align-items:center;justify-content:center;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+        </div>
+        <div>
+          <div class="font-bold mb-1" style="font-family:'Raleway',sans-serif;font-size:14px;">Paying for Dead Weight</div>
+          <div class="text-muted" style="font-size:13px;line-height:1.6;">The pompa-wss ECS task is a duplicate of our existing EC2 WSS server. It runs 24/7 behind its own ALB doing nothing.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider mb-20"></div>
+
+  <!-- ARCHITECTURE COMPARISON -->
+  <section class="mb-20 reveal">
+    <div class="section-label mb-4">Architecture</div>
+    <h2 style="font-size:1.8rem;font-weight:700;margin-bottom:24px;">Before vs After</h2>
+
+    <div class="grid md:grid-cols-2 gap-6">
+      <!-- Before -->
+      <div class="card p-6" style="border-color:rgba(239,68,68,0.15);">
+        <div class="flex items-center gap-3 mb-5">
+          <span class="badge badge-red">CURRENT</span>
+          <span class="text-muted text-xs">ECS Fargate</span>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <div class="arch-box" style="border-color:rgba(239,68,68,0.2);text-align:center;">
+            <div class="text-danger text-xs mb-1">ALB x3</div>
+            <div class="text-muted" style="font-size:11px;">prod + staging + WSS</div>
+          </div>
+          <div style="text-align:center;color:var(--danger);font-size:18px;">↓</div>
+          <div class="arch-box" style="border-color:rgba(239,68,68,0.2);">
+            <div class="text-danger text-xs mb-2">ECS Cluster</div>
+            <div style="display:flex;flex-direction:column;gap:6px;">
+              <div style="background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.15);border-radius:6px;padding:6px 10px;font-size:11px;">
+                <span class="text-danger">prod-task</span> <span class="text-muted">/ 1vCPU 100% util</span>
+              </div>
+              <div style="background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.15);border-radius:6px;padding:6px 10px;font-size:11px;">
+                <span class="text-danger">staging-task</span> <span class="text-muted">/ over-provisioned</span>
+              </div>
+              <div style="background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.15);border-radius:6px;padding:6px 10px;font-size:11px;">
+                <span class="text-danger">pompa-wss</span> <span class="text-muted">/ duplicate WSS</span>
+              </div>
+            </div>
+          </div>
+          <div style="text-align:center;color:var(--danger);font-size:18px;">↓</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;">
+            <div class="arch-box" style="border-color:rgba(239,68,68,0.2);text-align:center;font-size:11px;"><span class="text-muted">NAT Gateway</span><br><span class="text-danger text-xs">$31/mo</span></div>
+            <div class="arch-box" style="border-color:rgba(239,68,68,0.2);text-align:center;font-size:11px;"><span class="text-muted">ECR</span><br><span class="text-danger text-xs">$42/mo</span></div>
+          </div>
+          <div class="arch-box" style="border-color:rgba(239,68,68,0.2);text-align:center;font-size:11px;">
+            <span class="text-muted">Aurora DB</span>
+          </div>
+        </div>
+        <div class="mt-4 pt-4" style="border-top:1px solid var(--border);">
+          <div class="text-danger font-bold" style="font-family:'Raleway',sans-serif;font-size:1.5rem;">~$308<span class="text-muted text-sm font-normal">/mo</span></div>
+        </div>
+      </div>
+
+      <!-- After -->
+      <div class="card p-6 glow-accent" style="border-color:rgba(0,229,160,0.2);">
+        <div class="flex items-center gap-3 mb-5">
+          <span class="badge badge-green">PROPOSED</span>
+          <span class="text-muted text-xs">EC2 Direct</span>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;">
+            <div class="arch-box" style="border-color:rgba(0,229,160,0.25);text-align:center;">
+              <div class="text-accent text-xs mb-1">web (prod)</div>
+              <div class="text-muted" style="font-size:11px;">t3.small</div>
+              <div class="text-muted" style="font-size:10px;">Caddy + PHP-FPM</div>
+            </div>
+            <div class="arch-box" style="border-color:rgba(0,229,160,0.25);text-align:center;">
+              <div class="text-accent text-xs mb-1">worker (prod)</div>
+              <div class="text-muted" style="font-size:11px;">t3.micro</div>
+              <div class="text-muted" style="font-size:10px;">Supervisor + artisan</div>
+            </div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;">
+            <div class="arch-box" style="border-color:rgba(14,165,233,0.25);text-align:center;">
+              <div class="text-blue text-xs mb-1">staging</div>
+              <div class="text-muted" style="font-size:11px;">t3.small</div>
+              <div class="text-muted" style="font-size:10px;">full env</div>
+            </div>
+            <div class="arch-box" style="border-color:rgba(14,165,233,0.25);text-align:center;">
+              <div class="text-blue text-xs mb-1">WSS + Valkey</div>
+              <div class="text-muted" style="font-size:11px;">t3.small</div>
+              <div class="text-muted" style="font-size:10px;">rebuilt, same IP</div>
+            </div>
+          </div>
+          <div class="arch-box" style="border-color:rgba(0,229,160,0.2);text-align:center;font-size:11px;">
+            <span class="text-accent">Aurora DB</span> <span class="text-muted">/ unchanged</span>
+          </div>
+          <div style="background:rgba(0,229,160,0.05);border:1px solid rgba(0,229,160,0.15);border-radius:8px;padding:10px;text-align:center;font-size:12px;">
+            <span class="text-accent">GitHub Actions</span> <span class="text-muted">SSH deploys &lt;2 min</span>
+          </div>
+        </div>
+        <div class="mt-4 pt-4" style="border-top:1px solid rgba(0,229,160,0.15);">
+          <div class="text-accent font-bold" style="font-family:'Raleway',sans-serif;font-size:1.5rem;">~$70<span class="text-muted text-sm font-normal">/mo</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider mb-20"></div>
+
+  <!-- COST BREAKDOWN -->
+  <section class="mb-20 reveal">
+    <div class="section-label mb-4">Cost Analysis</div>
+    <h2 style="font-size:1.8rem;font-weight:700;margin-bottom:24px;">What Gets Cut</h2>
+
+    <div class="grid md:grid-cols-2 gap-8">
+      <!-- Current costs -->
+      <div>
+        <div class="text-muted text-xs uppercase tracking-widest mb-4">Current Monthly</div>
+        <div style="display:flex;flex-direction:column;gap:12px;">
+          <div class="cost-item" data-value="39" data-max="120">
+            <div class="flex justify-between mb-1" style="font-size:13px;">
+              <span class="text-muted">ECS Fargate compute (3 tasks)</span>
+              <span class="text-danger">$120</span>
+            </div>
+            <div style="background:rgba(255,255,255,0.05);border-radius:3px;height:4px;overflow:hidden;">
+              <div class="cost-bar" style="background:var(--danger);width:0%;" data-pct="39"></div>
+            </div>
+          </div>
+          <div class="cost-item" data-value="14" data-max="120">
+            <div class="flex justify-between mb-1" style="font-size:13px;">
+              <span class="text-muted">ECR image storage</span>
+              <span class="text-danger">$42</span>
+            </div>
+            <div style="background:rgba(255,255,255,0.05);border-radius:3px;height:4px;overflow:hidden;">
+              <div class="cost-bar" style="background:var(--danger);width:0%;" data-pct="14"></div>
+            </div>
+          </div>
+          <div class="cost-item">
+            <div class="flex justify-between mb-1" style="font-size:13px;">
+              <span class="text-muted">NAT Gateway</span>
+              <span class="text-danger">$31</span>
+            </div>
+            <div style="background:rgba(255,255,255,0.05);border-radius:3px;height:4px;overflow:hidden;">
+              <div class="cost-bar" style="background:var(--danger);width:0%;" data-pct="10"></div>
+            </div>
+          </div>
+          <div class="cost-item">
+            <div class="flex justify-between mb-1" style="font-size:13px;">
+              <span class="text-muted">ALBs (prod + staging + WSS)</span>
+              <span class="text-danger">$50</span>
+            </div>
+            <div style="background:rgba(255,255,255,0.05);border-radius:3px;height:4px;overflow:hidden;">
+              <div class="cost-bar" style="background:var(--danger);width:0%;" data-pct="16"></div>
+            </div>
+          </div>
+          <div class="cost-item">
+            <div class="flex justify-between mb-1" style="font-size:13px;">
+              <span class="text-muted">c6a.large WSS/Valkey EC2</span>
+              <span class="text-danger">$65</span>
+            </div>
+            <div style="background:rgba(255,255,255,0.05);border-radius:3px;height:4px;overflow:hidden;">
+              <div class="cost-bar" style="background:var(--danger);width:0%;" data-pct="21"></div>
+            </div>
+          </div>
+          <div class="flex justify-between pt-3" style="border-top:1px solid rgba(239,68,68,0.2);">
+            <span style="font-family:'Raleway',sans-serif;font-weight:700;font-size:14px;">Total</span>
+            <span class="text-danger" style="font-family:'Raleway',sans-serif;font-weight:700;font-size:18px;">$308/mo</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Proposed costs -->
+      <div>
+        <div class="text-muted text-xs uppercase tracking-widest mb-4">Proposed Monthly</div>
+        <div style="display:flex;flex-direction:column;gap:12px;">
+          <div class="cost-item">
+            <div class="flex justify-between mb-1" style="font-size:13px;">
+              <span class="text-muted">API web prod (t3.small)</span>
+              <span class="text-accent">$15</span>
+            </div>
+            <div style="background:rgba(255,255,255,0.05);border-radius:3px;height:4px;overflow:hidden;">
+              <div class="cost-bar" style="background:var(--accent);width:0%;" data-pct="21"></div>
+            </div>
+          </div>
+          <div class="cost-item">
+            <div class="flex justify-between mb-1" style="font-size:13px;">
+              <span class="text-muted">Queue worker prod (t3.micro)</span>
+              <span class="text-accent">$10</span>
+            </div>
+            <div style="background:rgba(255,255,255,0.05);border-radius:3px;height:4px;overflow:hidden;">
+              <div class="cost-bar" style="background:var(--accent);width:0%;" data-pct="14"></div>
+            </div>
+          </div>
+          <div class="cost-item">
+            <div class="flex justify-between mb-1" style="font-size:13px;">
+              <span class="text-muted">API staging (t3.small)</span>
+              <span class="text-accent">$15</span>
+            </div>
+            <div style="background:rgba(255,255,255,0.05);border-radius:3px;height:4px;overflow:hidden;">
+              <div class="cost-bar" style="background:var(--accent);width:0%;" data-pct="21"></div>
+            </div>
+          </div>
+          <div class="cost-item">
+            <div class="flex justify-between mb-1" style="font-size:13px;">
+              <span class="text-muted">WSS + Valkey rebuild (t3.small)</span>
+              <span class="text-accent">$15</span>
+            </div>
+            <div style="background:rgba(255,255,255,0.05);border-radius:3px;height:4px;overflow:hidden;">
+              <div class="cost-bar" style="background:var(--accent);width:0%;" data-pct="21"></div>
+            </div>
+          </div>
+          <div class="cost-item">
+            <div class="flex justify-between mb-1" style="font-size:13px;">
+              <span class="text-muted">Elastic IPs x4</span>
+              <span class="text-accent">$15</span>
+            </div>
+            <div style="background:rgba(255,255,255,0.05);border-radius:3px;height:4px;overflow:hidden;">
+              <div class="cost-bar" style="background:var(--accent);width:0%;" data-pct="21"></div>
+            </div>
+          </div>
+          <div class="flex justify-between pt-3" style="border-top:1px solid rgba(0,229,160,0.2);">
+            <span style="font-family:'Raleway',sans-serif;font-weight:700;font-size:14px;">Total</span>
+            <span class="text-accent" style="font-family:'Raleway',sans-serif;font-weight:700;font-size:18px;">$70/mo</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Savings highlight -->
+    <div class="mt-8 p-6 reveal" style="background:rgba(0,229,160,0.05);border:1px solid rgba(0,229,160,0.15);border-radius:12px;">
+      <div class="grid grid-cols-3 gap-4 text-center">
+        <div>
+          <div class="text-muted text-xs uppercase tracking-widest mb-1">Annual Savings</div>
+          <div class="text-accent" style="font-family:'Raleway',sans-serif;font-weight:800;font-size:2rem;">$2,856</div>
+        </div>
+        <div>
+          <div class="text-muted text-xs uppercase tracking-widest mb-1">Cost Reduction</div>
+          <div class="text-accent" style="font-family:'Raleway',sans-serif;font-weight:800;font-size:2rem;">77%</div>
+        </div>
+        <div>
+          <div class="text-muted text-xs uppercase tracking-widest mb-1">Setup Time</div>
+          <div class="text-accent" style="font-family:'Raleway',sans-serif;font-weight:800;font-size:2rem;">4-6 hrs</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider mb-20"></div>
+
+  <!-- DEPLOYMENT PIPELINE -->
+  <section class="mb-20 reveal">
+    <div class="section-label mb-4">Deployment</div>
+    <h2 style="font-size:1.8rem;font-weight:700;margin-bottom:8px;">Bulletproof Deploy Pipeline</h2>
+    <p class="text-muted mb-8" style="font-size:13px;">GitHub Actions over SSH. Under 2 minutes. Web and worker deployed independently so a bad push never takes both down.</p>
+
+    <!-- Pipeline flow -->
+    <div class="card p-6 mb-6" style="border-color:rgba(0,229,160,0.15);">
+      <div class="text-muted text-xs uppercase tracking-widest mb-5">Deploy Flow</div>
+      <div style="overflow-x:auto;">
+        <div style="display:flex;align-items:center;gap:0;min-width:600px;">
+
+          <div style="flex:1;text-align:center;">
+            <div style="background:rgba(0,229,160,0.08);border:1px solid rgba(0,229,160,0.2);border-radius:8px;padding:10px 8px;margin-bottom:6px;">
+              <div style="font-size:18px;margin-bottom:4px;">🔀</div>
+              <div class="text-accent" style="font-size:11px;font-weight:600;">Push to main</div>
+            </div>
+            <div class="text-muted" style="font-size:10px;">trigger</div>
+          </div>
+
+          <div class="flow-arrow" style="flex-shrink:0;padding:0 8px;">→</div>
+
+          <div style="flex:1;text-align:center;">
+            <div style="background:rgba(14,165,233,0.08);border:1px solid rgba(14,165,233,0.2);border-radius:8px;padding:10px 8px;margin-bottom:6px;">
+              <div style="font-size:18px;margin-bottom:4px;">⚙️</div>
+              <div class="text-blue" style="font-size:11px;font-weight:600;">GH Action fires</div>
+            </div>
+            <div class="text-muted" style="font-size:10px;">automated</div>
+          </div>
+
+          <div class="flow-arrow" style="flex-shrink:0;padding:0 8px;">→</div>
+
+          <div style="flex:1;text-align:center;">
+            <div style="background:rgba(14,165,233,0.08);border:1px solid rgba(14,165,233,0.2);border-radius:8px;padding:10px 8px;margin-bottom:6px;">
+              <div style="font-size:18px;margin-bottom:4px;">🔐</div>
+              <div class="text-blue" style="font-size:11px;font-weight:600;">SSH into EC2</div>
+            </div>
+            <div class="text-muted" style="font-size:10px;">key auth</div>
+          </div>
+
+          <div class="flow-arrow" style="flex-shrink:0;padding:0 8px;">→</div>
+
+          <div style="flex:1;text-align:center;">
+            <div style="background:rgba(14,165,233,0.08);border:1px solid rgba(14,165,233,0.2);border-radius:8px;padding:10px 8px;margin-bottom:6px;">
+              <div style="font-size:18px;margin-bottom:4px;">📦</div>
+              <div class="text-blue" style="font-size:11px;font-weight:600;">git pull + composer</div>
+            </div>
+            <div class="text-muted" style="font-size:10px;">latest code</div>
+          </div>
+
+          <div class="flow-arrow" style="flex-shrink:0;padding:0 8px;">→</div>
+
+          <div style="flex:1;text-align:center;">
+            <div style="background:rgba(14,165,233,0.08);border:1px solid rgba(14,165,233,0.2);border-radius:8px;padding:10px 8px;margin-bottom:6px;">
+              <div style="font-size:18px;margin-bottom:4px;">🗄️</div>
+              <div class="text-blue" style="font-size:11px;font-weight:600;">artisan migrate</div>
+            </div>
+            <div class="text-muted" style="font-size:10px;">db updates</div>
+          </div>
+
+          <div class="flow-arrow" style="flex-shrink:0;padding:0 8px;">→</div>
+
+          <div style="flex:1;text-align:center;">
+            <div style="background:rgba(0,229,160,0.08);border:1px solid rgba(0,229,160,0.2);border-radius:8px;padding:10px 8px;margin-bottom:6px;">
+              <div style="font-size:18px;margin-bottom:4px;">✅</div>
+              <div class="text-accent" style="font-size:11px;font-weight:600;">PHP-FPM reload</div>
+            </div>
+            <div class="text-muted" style="font-size:10px;">graceful</div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- Worker deploy + rollback side by side -->
+    <div class="grid md:grid-cols-2 gap-6">
+      <div class="card p-6">
+        <div class="flex items-center gap-2 mb-4">
+          <span class="badge badge-blue">WORKERS</span>
+          <span class="text-muted text-xs">Supervisor managed</span>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:8px;font-size:13px;">
+          <div class="flex gap-3 items-start">
+            <span class="text-accent" style="margin-top:2px;flex-shrink:0;">01</span>
+            <span class="text-muted">Deploy triggers <code style="color:var(--accent2);background:rgba(14,165,233,0.1);padding:1px 5px;border-radius:3px;">supervisorctl restart</code></span>
+          </div>
+          <div class="flex gap-3 items-start">
+            <span class="text-accent" style="margin-top:2px;flex-shrink:0;">02</span>
+            <span class="text-muted">Supervisor waits for in-flight jobs to finish</span>
+          </div>
+          <div class="flex gap-3 items-start">
+            <span class="text-accent" style="margin-top:2px;flex-shrink:0;">03</span>
+            <span class="text-muted">Worker process boots with new code</span>
+          </div>
+          <div class="flex gap-3 items-start">
+            <span class="text-accent" style="margin-top:2px;flex-shrink:0;">04</span>
+            <span class="text-muted">Zero jobs dropped. If worker crashes, auto-restart no human needed</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card p-6">
+        <div class="flex items-center gap-2 mb-4">
+          <span class="badge badge-amber">ROLLBACK</span>
+          <span class="text-muted text-xs">Under 60 seconds</span>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:12px;">
+          <div style="background:var(--surface2);border-radius:8px;padding:12px 14px;font-size:12px;">
+            <div class="text-muted mb-2">EC2 Rollback</div>
+            <code style="color:var(--accent);">git checkout &lt;tag&gt;</code><br>
+            <code style="color:var(--accent2);">php-fpm reload</code><br>
+            <div class="text-muted mt-2" style="font-size:11px;">Done in &lt;60 seconds</div>
+          </div>
+          <div style="background:rgba(239,68,68,0.05);border:1px solid rgba(239,68,68,0.15);border-radius:8px;padding:10px 14px;font-size:12px;">
+            <div class="text-danger mb-1">ECS Rollback</div>
+            <div class="text-muted" style="font-size:11px;line-height:1.6;">Re-push image, register new task definition, force new deployment, wait for drain cycle. 15-20 minutes.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider mb-20"></div>
+
+  <!-- STABILITY -->
+  <section class="mb-20 reveal">
+    <div class="section-label mb-4">Stability</div>
+    <h2 style="font-size:1.8rem;font-weight:700;margin-bottom:8px;">What Happens When Things Break</h2>
+    <p class="text-muted mb-8" style="font-size:13px;">Every failure mode has an automatic recovery path. Nothing requires human intervention for common issues.</p>
+
+    <!-- CPU comparison visual -->
+    <div class="card p-6 mb-6">
+      <div class="text-muted text-xs uppercase tracking-widest mb-5">CPU Contention: Then vs Now</div>
+      <div class="grid md:grid-cols-2 gap-6">
+        <div>
+          <div class="text-danger text-xs mb-3">CURRENT - Single task, shared CPU</div>
+          <div style="background:var(--surface2);border-radius:8px;padding:12px;border:1px solid rgba(239,68,68,0.15);">
+            <div style="border:1px solid rgba(239,68,68,0.3);border-radius:6px;padding:10px;background:rgba(239,68,68,0.05);margin-bottom:8px;">
+              <div class="text-xs text-muted mb-2">Fargate Task (1 vCPU)</div>
+              <div class="flex gap-1 mb-1">
+                <div style="flex:1;height:24px;background:rgba(239,68,68,0.6);border-radius:3px;display:flex;align-items:center;justify-content:center;font-size:10px;color:white;">HTTP</div>
+                <div style="flex:1;height:24px;background:rgba(239,68,68,0.4);border-radius:3px;display:flex;align-items:center;justify-content:center;font-size:10px;color:white;">JOBS</div>
+                <div style="flex:0.2;height:24px;background:rgba(239,68,68,0.15);border-radius:3px;"></div>
+              </div>
+              <div class="text-danger text-xs">100% CPU - jobs delay HTTP response times</div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="text-accent text-xs mb-3">PROPOSED - Separated, dedicated resources</div>
+          <div style="background:var(--surface2);border-radius:8px;padding:12px;border:1px solid rgba(0,229,160,0.15);">
+            <div style="display:flex;flex-direction:column;gap:6px;">
+              <div style="border:1px solid rgba(0,229,160,0.2);border-radius:6px;padding:8px;background:rgba(0,229,160,0.05);">
+                <div class="text-xs text-muted mb-1">Web Instance (2 vCPU)</div>
+                <div style="display:flex;gap:2px;">
+                  <div style="flex:0.5;height:20px;background:rgba(0,229,160,0.5);border-radius:3px;display:flex;align-items:center;justify-content:center;font-size:10px;color:white;">HTTP</div>
+                  <div style="flex:1.5;height:20px;background:rgba(0,229,160,0.1);border-radius:3px;"></div>
+                </div>
+                <div class="text-accent text-xs mt-1">~25% CPU - headroom to spare</div>
+              </div>
+              <div style="border:1px solid rgba(14,165,233,0.2);border-radius:6px;padding:8px;background:rgba(14,165,233,0.05);">
+                <div class="text-xs text-muted mb-1">Worker Instance (1 vCPU)</div>
+                <div style="display:flex;gap:2px;">
+                  <div style="flex:0.4;height:20px;background:rgba(14,165,233,0.5);border-radius:3px;display:flex;align-items:center;justify-content:center;font-size:10px;color:white;">JOBS</div>
+                  <div style="flex:1.6;height:20px;background:rgba(14,165,233,0.1);border-radius:3px;"></div>
+                </div>
+                <div class="text-blue text-xs mt-1">dedicated - never touches web CPU</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Failure scenarios table -->
+    <div class="card overflow-hidden">
+      <div class="px-6 pt-5 pb-3">
+        <div class="text-muted text-xs uppercase tracking-widest">Failure Scenarios and Recovery</div>
+      </div>
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Scenario</th>
+            <th>Impact</th>
+            <th>Recovery</th>
+            <th>Human Required?</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Worker process crashes</td>
+            <td><span class="badge badge-amber">Low</span> web unaffected</td>
+            <td style="color:var(--accent);">Supervisor auto-restarts</td>
+            <td><span class="badge badge-green">No</span></td>
+          </tr>
+          <tr>
+            <td>Bad deploy pushed to web</td>
+            <td><span class="badge badge-amber">Medium</span> web errors</td>
+            <td style="color:var(--accent);">git checkout + reload &lt;60s</td>
+            <td><span class="badge badge-amber">Yes - 60s fix</span></td>
+          </tr>
+          <tr>
+            <td>Web instance slow / high load</td>
+            <td><span class="badge badge-amber">Medium</span> slow responses</td>
+            <td style="color:var(--accent);">Workers keep processing, add 2nd web node</td>
+            <td><span class="badge badge-green">Optional</span></td>
+          </tr>
+          <tr>
+            <td>Failed migration on deploy</td>
+            <td><span class="badge badge-red">Caught in staging</span></td>
+            <td style="color:var(--accent);">Staging deploy fails, prod untouched</td>
+            <td><span class="badge badge-green">No - blocked before prod</span></td>
+          </tr>
+          <tr>
+            <td>Instance goes down</td>
+            <td><span class="badge badge-amber">Medium</span> isolated to that service</td>
+            <td style="color:var(--accent);">Replace instance, same Elastic IP, same config</td>
+            <td><span class="badge badge-amber">Yes - minutes</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <div class="divider mb-20"></div>
+
+  <!-- SCALING -->
+  <section class="mb-20 reveal">
+    <div class="section-label mb-4">Scale</div>
+    <h2 style="font-size:1.8rem;font-weight:700;margin-bottom:8px;">Horizontal Scaling When We Need It</h2>
+    <p class="text-muted mb-8" style="font-size:13px;">No architecture changes required. Each new instance is identical to the first and connects to the same shared data layer.</p>
+
+    <div class="grid md:grid-cols-3 gap-4">
+      <div class="card p-5">
+        <div class="text-blue text-xs uppercase tracking-widest mb-3">Add Web Capacity</div>
+        <div style="font-size:13px;color:var(--muted);line-height:1.7;">Spin up another t3.small, point it at Aurora and Valkey, drop it behind a Caddy proxy or ALB. No code changes.</div>
+        <div class="mt-3">
+          <span class="badge badge-blue">~5 min setup</span>
+        </div>
+      </div>
+      <div class="card p-5">
+        <div class="text-accent text-xs uppercase tracking-widest mb-3">Add Worker Capacity</div>
+        <div style="font-size:13px;color:var(--muted);line-height:1.7;">Spin up another t3.micro, point it at Valkey queue, Supervisor starts pulling jobs. Completely independent and stateless.</div>
+        <div class="mt-3">
+          <span class="badge badge-green">~5 min setup</span>
+        </div>
+      </div>
+      <div class="card p-5">
+        <div class="text-amber text-xs uppercase tracking-widest mb-3">New API Services</div>
+        <div style="font-size:13px;color:var(--muted);line-height:1.7;">Same pattern. Small EC2, GitHub Actions deploy, shared data layer. Each service isolated, cheap to run, easy to reason about.</div>
+        <div class="mt-3">
+          <span class="badge badge-amber">same playbook</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider mb-20"></div>
+
+  <!-- RECOMMENDATION -->
+  <section class="mb-16 reveal">
+    <div class="section-label mb-4">Recommendation</div>
+    <h2 style="font-size:1.8rem;font-weight:700;margin-bottom:24px;">What We Do and When</h2>
+
+    <div class="animated-border mb-6" style="position:relative;">
+      <div style="background:var(--surface);border-radius:12px;padding:28px 32px;position:relative;z-index:1;">
+        <div class="grid md:grid-cols-2 gap-8">
+          <div>
+            <div class="text-accent text-xs uppercase tracking-widest mb-4">Migration Steps</div>
+            <div style="display:flex;flex-direction:column;gap:10px;">
+              <div class="flex gap-3">
+                <span style="background:rgba(0,229,160,0.15);color:var(--accent);border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0;font-family:'Raleway',sans-serif;font-weight:700;">1</span>
+                <span class="text-muted" style="font-size:13px;">Stand up 4 EC2 instances in parallel with existing ECS</span>
+              </div>
+              <div class="flex gap-3">
+                <span style="background:rgba(0,229,160,0.15);color:var(--accent);border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0;font-family:'Raleway',sans-serif;font-weight:700;">2</span>
+                <span class="text-muted" style="font-size:13px;">Configure GitHub Actions deploy pipeline, validate on staging</span>
+              </div>
+              <div class="flex gap-3">
+                <span style="background:rgba(0,229,160,0.15);color:var(--accent);border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0;font-family:'Raleway',sans-serif;font-weight:700;">3</span>
+                <span class="text-muted" style="font-size:13px;">Rebuild WSS/Valkey on t3.small, cut over via existing Elastic IP</span>
+              </div>
+              <div class="flex gap-3">
+                <span style="background:rgba(0,229,160,0.15);color:var(--accent);border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0;font-family:'Raleway',sans-serif;font-weight:700;">4</span>
+                <span class="text-muted" style="font-size:13px;">Validate prod EC2 behavior, then cut DNS</span>
+              </div>
+              <div class="flex gap-3">
+                <span style="background:rgba(0,229,160,0.15);color:var(--accent);border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0;font-family:'Raleway',sans-serif;font-weight:700;">5</span>
+                <span class="text-muted" style="font-size:13px;">Decommission ECS cluster, ECR, NAT Gateway, redundant ALBs</span>
+              </div>
+            </div>
+          </div>
+          <div>
+            <div class="text-accent text-xs uppercase tracking-widest mb-4">Net Result</div>
+            <div style="display:flex;flex-direction:column;gap:8px;">
+              <div class="flex items-center gap-3">
+                <span style="color:var(--accent);font-size:16px;">✓</span>
+                <span class="text-muted" style="font-size:13px;">$238/mo saved, $2,856/yr</span>
+              </div>
+              <div class="flex items-center gap-3">
+                <span style="color:var(--accent);font-size:16px;">✓</span>
+                <span class="text-muted" style="font-size:13px;">Queue workers fully unblocked</span>
+              </div>
+              <div class="flex items-center gap-3">
+                <span style="color:var(--accent);font-size:16px;">✓</span>
+                <span class="text-muted" style="font-size:13px;">Deploys drop from 20 min to under 2 min</span>
+              </div>
+              <div class="flex items-center gap-3">
+                <span style="color:var(--accent);font-size:16px;">✓</span>
+                <span class="text-muted" style="font-size:13px;">Full SSH access for instant debugging</span>
+              </div>
+              <div class="flex items-center gap-3">
+                <span style="color:var(--accent);font-size:16px;">✓</span>
+                <span class="text-muted" style="font-size:13px;">Web and worker CPU fully isolated</span>
+              </div>
+              <div class="flex items-center gap-3">
+                <span style="color:var(--accent);font-size:16px;">✓</span>
+                <span class="text-muted" style="font-size:13px;">Staging safety net on every push</span>
+              </div>
+              <div class="flex items-center gap-3">
+                <span style="color:var(--accent);font-size:16px;">✓</span>
+                <span class="text-muted" style="font-size:13px;">Scale web or workers in minutes, no arch changes</span>
+              </div>
+            </div>
+            <div class="mt-5 pt-4" style="border-top:1px solid var(--border);">
+              <span class="text-muted text-xs">Estimated total setup time: </span>
+              <span class="text-accent text-xs font-bold">4-6 hours</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <div class="text-center reveal">
+    <div class="text-muted" style="font-size:11px;letter-spacing:0.08em;">
+      Hackney Enterprises / SMS Comms API Migration / March 2026
+    </div>
+  </div>
+
+</div>
+
+<script>
+  // Particle canvas background
+  const canvas = document.getElementById('bg-canvas');
+  const ctx = canvas.getContext('2d');
+  let particles = [];
+  let animFrame;
+
+  function resize() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+
+  class Particle {
+    constructor() { this.reset(); }
+    reset() {
+      this.x = Math.random() * canvas.width;
+      this.y = Math.random() * canvas.height;
+      this.vx = (Math.random() - 0.5) * 0.3;
+      this.vy = (Math.random() - 0.5) * 0.3;
+      this.alpha = Math.random() * 0.5 + 0.1;
+      this.r = Math.random() * 1.5 + 0.5;
+      this.color = Math.random() > 0.5 ? '0,229,160' : '14,165,233';
+    }
+    update() {
+      this.x += this.vx;
+      this.y += this.vy;
+      if (this.x < 0 || this.x > canvas.width || this.y < 0 || this.y > canvas.height) this.reset();
+    }
+    draw() {
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(${this.color},${this.alpha})`;
+      ctx.fill();
+    }
+  }
+
+  function initParticles() {
+    particles = Array.from({length: 80}, () => new Particle());
+  }
+
+  function drawConnections() {
+    for (let i = 0; i < particles.length; i++) {
+      for (let j = i + 1; j < particles.length; j++) {
+        const dx = particles[i].x - particles[j].x;
+        const dy = particles[i].y - particles[j].y;
+        const dist = Math.sqrt(dx*dx + dy*dy);
+        if (dist < 120) {
+          ctx.beginPath();
+          ctx.moveTo(particles[i].x, particles[i].y);
+          ctx.lineTo(particles[j].x, particles[j].y);
+          ctx.strokeStyle = `rgba(0,229,160,${0.04 * (1 - dist/120)})`;
+          ctx.lineWidth = 0.5;
+          ctx.stroke();
+        }
+      }
+    }
+  }
+
+  function animate() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    particles.forEach(p => { p.update(); p.draw(); });
+    drawConnections();
+    animFrame = requestAnimationFrame(animate);
+  }
+
+  resize();
+  initParticles();
+  animate();
+  window.addEventListener('resize', () => { resize(); initParticles(); });
+
+  // Counter animation
+  function animateCounter(el) {
+    const target = parseInt(el.getAttribute('data-target'));
+    const isPrice = el.classList.contains('counter');
+    let current = 0;
+    const increment = target / 60;
+    const timer = setInterval(() => {
+      current = Math.min(current + increment, target);
+      el.textContent = '$' + Math.round(current);
+      if (current >= target) clearInterval(timer);
+    }, 16);
+  }
+
+  // Cost bar animation
+  function animateBars() {
+    document.querySelectorAll('.cost-bar').forEach(bar => {
+      const pct = bar.getAttribute('data-pct');
+      setTimeout(() => { bar.style.width = pct + '%'; }, 200);
+    });
+  }
+
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        // Trigger counters when hero is visible
+        if (entry.target.querySelector('.counter')) {
+          entry.target.querySelectorAll('.counter').forEach(animateCounter);
+        }
+        // Trigger bars
+        if (entry.target.querySelector('.cost-bar')) {
+          setTimeout(animateBars, 300);
+        }
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1 });
+
+  reveals.forEach(r => observer.observe(r));
+</script>
+
+</body>
+</html>
