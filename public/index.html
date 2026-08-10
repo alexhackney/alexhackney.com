@@ -4,10 +4,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Alex Hackney - Full Stack Developer specializing in PHP, Laravel, Vue, React, and DevOps. Based in Clearwater, FL.">
-    <meta name="keywords" content="Full Stack Developer, PHP, Laravel, Vue, React, DevOps, AWS, Video Streaming">
+    <meta name="description" content="Alex Hackney, full stack developer in Clearwater, FL. Laravel, Vue and React apps, open-source PHP packages, video streaming, and AWS infrastructure.">
+    <meta name="keywords" content="Full Stack Developer, PHP, Laravel, Vue, React, DevOps, AWS, Video Streaming, Laravel Packages, Secrets Management">
     <meta name="author" content="Alex Hackney">
-    <title>Alex Hackney | Full Stack Developer</title>
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
+    <title>Alex Hackney | Full Stack Laravel &amp; DevOps Developer</title>
 
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96">
@@ -22,264 +23,135 @@
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://alexhackney.com/">
-    <meta property="og:title" content="Alex Hackney | Full Stack Developer">
-    <meta property="og:description" content="Alex Hackney - Full Stack Developer specializing in PHP, Laravel, Vue, React, and DevOps. Based in Clearwater, FL.">
+    <meta property="og:title" content="Alex Hackney | Full Stack Laravel &amp; DevOps Developer">
+    <meta property="og:description" content="Alex Hackney, full stack developer in Clearwater, FL. Laravel, Vue and React apps, open-source PHP packages, video streaming, and AWS infrastructure.">
     <meta property="og:image" content="https://alexhackney.com/og-image.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Alex Hackney, full stack developer">
     <meta property="og:locale" content="en_US">
     <meta property="og:site_name" content="Alex Hackney">
 
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:url" content="https://alexhackney.com/">
-    <meta name="twitter:title" content="Alex Hackney | Full Stack Developer">
-    <meta name="twitter:description" content="Alex Hackney - Full Stack Developer specializing in PHP, Laravel, Vue, React, and DevOps. Based in Clearwater, FL.">
+    <meta name="twitter:title" content="Alex Hackney | Full Stack Laravel &amp; DevOps Developer">
+    <meta name="twitter:description" content="Alex Hackney, full stack developer in Clearwater, FL. Laravel, Vue and React apps, open-source PHP packages, video streaming, and AWS infrastructure.">
     <meta name="twitter:image" content="https://alexhackney.com/og-image.jpg">
+    <meta name="twitter:image:alt" content="Alex Hackney, full stack developer">
 
     <!-- JSON-LD Structured Data -->
     <script type="application/ld+json">
     {
         "@context": "https://schema.org",
-        "@type": "Person",
-        "name": "Alex Hackney",
-        "url": "https://alexhackney.com",
-        "image": "https://alexhackney.com/og-image.jpg",
-        "jobTitle": "Full Stack Developer",
-        "description": "Full Stack Developer specializing in PHP, Laravel, Vue, React, DevOps, and video streaming solutions.",
-        "address": {
-            "@type": "PostalAddress",
-            "addressLocality": "Clearwater",
-            "addressRegion": "FL",
-            "addressCountry": "US"
-        },
-        "email": "alex@alexhackney.com",
-        "sameAs": [
-            "https://github.com/alexhackney",
-            "https://linkedin.com/in/ahackney"
-        ],
-        "knowsAbout": [
-            "PHP",
-            "Laravel",
-            "Vue.js",
-            "React",
-            "JavaScript",
-            "TypeScript",
-            "AWS",
-            "Docker",
-            "Video Streaming",
-            "DevOps",
-            "MySQL",
-            "PostgreSQL"
+        "@graph": [
+            {
+                "@type": "WebSite",
+                "@id": "https://alexhackney.com/#website",
+                "url": "https://alexhackney.com/",
+                "name": "Alex Hackney",
+                "inLanguage": "en-US",
+                "publisher": { "@id": "https://alexhackney.com/#person" }
+            },
+            {
+                "@type": "ProfilePage",
+                "@id": "https://alexhackney.com/#webpage",
+                "url": "https://alexhackney.com/",
+                "name": "Alex Hackney | Full Stack Laravel & DevOps Developer",
+                "dateModified": "2026-08-10",
+                "isPartOf": { "@id": "https://alexhackney.com/#website" },
+                "about": { "@id": "https://alexhackney.com/#person" },
+                "mainEntity": { "@id": "https://alexhackney.com/#person" }
+            },
+            {
+                "@type": "Person",
+                "@id": "https://alexhackney.com/#person",
+                "name": "Alex Hackney",
+                "url": "https://alexhackney.com",
+                "image": "https://alexhackney.com/og-image.jpg",
+                "jobTitle": "Full Stack Developer",
+                "description": "Full Stack Developer specializing in PHP, Laravel, Vue, React, DevOps, and video streaming solutions.",
+                "address": {
+                    "@type": "PostalAddress",
+                    "addressLocality": "Clearwater",
+                    "addressRegion": "FL",
+                    "addressCountry": "US"
+                },
+                "email": "alex@alexhackney.com",
+                "sameAs": [
+                    "https://github.com/alexhackney",
+                    "https://linkedin.com/in/ahackney"
+                ],
+                "knowsAbout": [
+                    "PHP",
+                    "Laravel",
+                    "Vue.js",
+                    "React",
+                    "JavaScript",
+                    "TypeScript",
+                    "AWS",
+                    "Docker",
+                    "Video Streaming",
+                    "DevOps",
+                    "MySQL",
+                    "PostgreSQL",
+                    "Secrets Management",
+                    "Doppler",
+                    "Laravel Package Development",
+                    "CI/CD"
+                ]
+            },
+            {
+                "@type": "SoftwareSourceCode",
+                "name": "Laravel Doppler",
+                "description": "Render a Laravel .env from Doppler secrets safely, atomically, and with a round-trip guarantee.",
+                "codeRepository": "https://github.com/alexhackney/laravel-doppler",
+                "programmingLanguage": "PHP",
+                "runtimePlatform": "Laravel",
+                "license": "https://opensource.org/licenses/MIT",
+                "author": { "@id": "https://alexhackney.com/#person" }
+            },
+            {
+                "@type": "SoftwareSourceCode",
+                "name": "Laravel Nimble",
+                "description": "Laravel package for the Nimble Streamer API: streams, DVR, sessions, and restreaming.",
+                "codeRepository": "https://github.com/alexhackney/lara-nimble",
+                "programmingLanguage": "PHP",
+                "runtimePlatform": "Laravel",
+                "author": { "@id": "https://alexhackney.com/#person" }
+            },
+            {
+                "@type": "SoftwareSourceCode",
+                "name": "Laravel SocialBu",
+                "description": "Laravel package for the SocialBu social media management API: posts, media uploads, and webhooks.",
+                "codeRepository": "https://github.com/alexhackney/laravel-socialbu",
+                "programmingLanguage": "PHP",
+                "runtimePlatform": "Laravel",
+                "author": { "@id": "https://alexhackney.com/#person" }
+            },
+            {
+                "@type": "SoftwareSourceCode",
+                "name": "Scarlett Player",
+                "description": "Modular, plugin-based video player with HLS, DASH, and Chromecast support.",
+                "codeRepository": "https://github.com/Hackney-Enterprises-Inc/scarlett-player",
+                "programmingLanguage": "TypeScript",
+                "author": { "@id": "https://alexhackney.com/#person" }
+            }
         ]
     }
-    </script>
+</script>
 
-    <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        dark: {
-                            900: '#0a0a0f',
-                            800: '#12121a',
-                            700: '#1a1a25',
-                            600: '#242430',
-                        },
-                        accent: {
-                            blue: '#3b82f6',
-                            red: '#ef4444',
-                            purple: '#8b5cf6',
-                        }
-                    },
-                    fontFamily: {
-                        sans: ['Inter', 'system-ui', 'sans-serif'],
-                        mono: ['JetBrains Mono', 'monospace'],
-                    }
-                }
-            }
-        }
-    </script>
+    <!-- Compiled Tailwind + custom styles (npm run build) -->
+    <link rel="stylesheet" href="/app.css">
 
-    <!-- Google Fonts -->
+    <!-- Google Fonts (non-blocking) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-
-    <style>
-        /* Custom scrollbar */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #0a0a0f;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #3b82f6;
-            border-radius: 4px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #2563eb;
-        }
-
-        /* Animated gradient background */
-        html, body {
-            width: 100%;
-            min-height: 100%;
-        }
-        .gradient-bg {
-            background: linear-gradient(135deg, #0a0a0f 0%, #1a1a2e 50%, #16213e 100%);
-            position: relative;
-            overflow-x: hidden;
-            min-width: 100%;
-        }
-
-        /* Floating particles canvas */
-        #particles-canvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 0;
-            pointer-events: none;
-        }
-
-        /* Parallax sections */
-        .parallax-section {
-            transform: translateZ(0);
-            will-change: transform;
-        }
-
-        /* Glowing text effect */
-        .glow-text {
-            text-shadow: 0 0 20px rgba(59, 130, 246, 0.5),
-                         0 0 40px rgba(59, 130, 246, 0.3),
-                         0 0 60px rgba(59, 130, 246, 0.1);
-        }
-
-        /* Card hover effects */
-        .card-hover {
-            transition: all 0.3s ease;
-            border: 1px solid transparent;
-        }
-        .card-hover:hover {
-            transform: translateY(-5px);
-            border-color: rgba(59, 130, 246, 0.3);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4),
-                        0 0 30px rgba(59, 130, 246, 0.1);
-        }
-
-        /* Skill badge animation */
-        .skill-badge {
-            transition: all 0.2s ease;
-        }
-        .skill-badge:hover {
-            transform: scale(1.05);
-            box-shadow: 0 0 20px rgba(59, 130, 246, 0.4);
-        }
-
-        /* Gradient border effect */
-        .gradient-border {
-            position: relative;
-            background: #12121a;
-        }
-        .gradient-border::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            padding: 1px;
-            background: linear-gradient(135deg, #3b82f6, #8b5cf6, #ef4444);
-            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-            -webkit-mask-composite: xor;
-            mask-composite: exclude;
-            border-radius: inherit;
-            pointer-events: none;
-        }
-
-        /* Mobile nav animation */
-        .mobile-nav {
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity 0.3s ease, visibility 0.3s ease;
-        }
-        .mobile-nav.active {
-            opacity: 1;
-            visibility: visible;
-        }
-
-        /* Mobile nav menu item animations */
-        .mobile-nav .mobile-nav-link {
-            opacity: 0;
-            transform: translateX(30px);
-            transition: opacity 0.3s ease, transform 0.3s ease;
-        }
-        .mobile-nav.active .mobile-nav-link:nth-child(1) { transition-delay: 0.1s; }
-        .mobile-nav.active .mobile-nav-link:nth-child(2) { transition-delay: 0.15s; }
-        .mobile-nav.active .mobile-nav-link:nth-child(3) { transition-delay: 0.2s; }
-        .mobile-nav.active .mobile-nav-link:nth-child(4) { transition-delay: 0.25s; }
-        .mobile-nav.active .mobile-nav-link:nth-child(5) { transition-delay: 0.3s; }
-        .mobile-nav.active .mobile-nav-link {
-            opacity: 1;
-            transform: translateX(0);
-        }
-
-        /* Fade in animation */
-        .fade-in {
-            opacity: 0;
-            transform: translateY(30px);
-            transition: opacity 0.6s ease, transform 0.6s ease;
-        }
-        .fade-in.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        /* Typing cursor */
-        .typing-cursor::after {
-            content: '|';
-            animation: blink 1s infinite;
-        }
-        @keyframes blink {
-            0%, 50% { opacity: 1; }
-            51%, 100% { opacity: 0; }
-        }
-
-        /* Code block styling */
-        .code-block {
-            background: linear-gradient(135deg, #1a1a25 0%, #12121a 100%);
-            font-family: 'JetBrains Mono', monospace;
-        }
-        .code-block pre {
-            font-size: 0.625rem;
-        }
-        @media (min-width: 400px) {
-            .code-block pre {
-                font-size: 0.75rem;
-            }
-        }
-        @media (min-width: 640px) {
-            .code-block pre {
-                font-size: 0.875rem;
-            }
-        }
-
-        /* Pulse animation for status indicator */
-        .pulse-dot {
-            animation: pulse 2s infinite;
-        }
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
-        }
-
-        /* Section divider */
-        .section-divider {
-            height: 1px;
-            background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.3), transparent);
-        }
-    </style>
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" media="print" onload="this.media='all'">
+    <noscript>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap">
+    </noscript>
 </head>
 <body class="gradient-bg text-gray-100 font-sans antialiased">
     <!-- Animated Background Canvas -->
@@ -685,6 +557,52 @@
             </div>
 
             <div class="grid md:grid-cols-2 gap-8">
+                <!-- Laravel Doppler Package -->
+                <div class="card-hover gradient-border rounded-xl overflow-hidden fade-in">
+                    <div class="p-6">
+                        <div class="flex items-start justify-between mb-4">
+                            <div class="w-12 h-12 bg-cyan-500/20 rounded-lg flex items-center justify-center">
+                                <svg class="w-6 h-6 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                                </svg>
+                            </div>
+                            <a href="https://github.com/alexhackney/laravel-doppler" target="_blank" rel="noopener noreferrer" class="text-gray-400 hover:text-white transition-colors" aria-label="Laravel Doppler on GitHub">
+                                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                    <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                                </svg>
+                            </a>
+                        </div>
+                        <h3 class="text-xl font-semibold mb-2">Laravel Doppler</h3>
+                        <p class="text-gray-400 mb-4">
+                            Renders a Laravel <span class="font-mono text-gray-300">.env</span> from Doppler secrets
+                            atomically, and refuses to write unless the rendered bytes load back through phpdotenv to
+                            exactly the values Doppler sent. Ships <span class="font-mono text-gray-300">env:sync</span>,
+                            <span class="font-mono text-gray-300">env:diff</span>,
+                            <span class="font-mono text-gray-300">env:doctor</span>, and encrypted local fallbacks.
+                        </p>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="px-2 py-1 bg-dark-600 rounded text-xs text-gray-400">PHP 8.2+</span>
+                            <span class="px-2 py-1 bg-dark-600 rounded text-xs text-gray-400">Laravel 12/13</span>
+                            <span class="px-2 py-1 bg-dark-600 rounded text-xs text-gray-400">Secrets Management</span>
+                            <span class="px-2 py-1 bg-dark-600 rounded text-xs text-gray-400">Atomic Writes</span>
+                            <span class="px-2 py-1 bg-dark-600 rounded text-xs text-gray-400">Zero-Downtime Deploys</span>
+                        </div>
+                        <div class="flex items-center space-x-4 text-sm text-gray-500">
+                            <span class="flex items-center space-x-1">
+                                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                                    <path d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z"/>
+                                </svg>
+                                <span>New</span>
+                            </span>
+                            <span class="flex items-center space-x-1">
+                                <span class="w-3 h-3 rounded-full bg-purple-500"></span>
+                                <span>PHP</span>
+                            </span>
+                            <span>357 tests</span>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Laravel Nimble Package -->
                 <div class="card-hover gradient-border rounded-xl overflow-hidden fade-in">
                     <div class="p-6">
@@ -1091,15 +1009,27 @@
             }
         }
 
+        // Cap the particle count: the connection pass below is O(n^2) per frame,
+        // so an uncapped count on a large display costs tens of thousands of
+        // distance calculations every frame for no visual gain.
+        const MAX_PARTICLES = 120;
+
         function initParticles() {
             particles = [];
-            const particleCount = Math.floor((canvas.width * canvas.height) / 15000);
+            const particleCount = Math.min(
+                MAX_PARTICLES,
+                Math.floor((canvas.width * canvas.height) / 15000)
+            );
             for (let i = 0; i < particleCount; i++) {
                 particles.push(new Particle());
             }
         }
 
         function connectParticles() {
+            // Skip the quadratic pass on phones, where the lines are barely visible
+            // and the frame budget is tightest.
+            if (window.innerWidth < 768) return;
+
             for (let i = 0; i < particles.length; i++) {
                 for (let j = i + 1; j < particles.length; j++) {
                     const dx = particles[i].x - particles[j].x;
@@ -1132,9 +1062,29 @@
         }
 
         // Initialize canvas
+        const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
         resizeCanvas();
         initParticles();
-        animate();
+
+        if (prefersReducedMotion) {
+            // Draw a single static frame instead of animating.
+            particles.forEach(particle => particle.draw());
+            connectParticles();
+        } else {
+            animate();
+        }
+
+        // Stop burning frames while the tab is in the background.
+        document.addEventListener('visibilitychange', () => {
+            if (prefersReducedMotion) return;
+
+            if (document.hidden) {
+                cancelAnimationFrame(animationId);
+            } else {
+                animate();
+            }
+        });
 
         window.addEventListener('resize', () => {
             resizeCanvas();
@@ -1176,7 +1126,7 @@
                 });
                 ticking = true;
             }
-        });
+        }, { passive: true });
 
         // Fade In Animation on Scroll
         const fadeElements = document.querySelectorAll('.fade-in');
@@ -1263,25 +1213,33 @@
         const sections = document.querySelectorAll('section[id]');
         const navLinks = document.querySelectorAll('nav a[href^="#"]');
 
-        window.addEventListener('scroll', () => {
+        // rAF-throttled: reading offsetTop on every section forces a layout,
+        // and the raw scroll event can fire far more often than we can paint.
+        let navTicking = false;
+
+        function updateActiveNav() {
             let current = '';
             sections.forEach(section => {
-                const sectionTop = section.offsetTop;
-                const sectionHeight = section.clientHeight;
-                if (window.pageYOffset >= sectionTop - 200) {
+                if (window.pageYOffset >= section.offsetTop - 200) {
                     current = section.getAttribute('id');
                 }
             });
 
             navLinks.forEach(link => {
-                link.classList.remove('text-white');
-                link.classList.add('text-gray-400');
-                if (link.getAttribute('href') === `#${current}`) {
-                    link.classList.remove('text-gray-400');
-                    link.classList.add('text-white');
-                }
+                const isActive = link.getAttribute('href') === `#${current}`;
+                link.classList.toggle('text-white', isActive);
+                link.classList.toggle('text-gray-400', !isActive);
             });
-        });
+
+            navTicking = false;
+        }
+
+        window.addEventListener('scroll', () => {
+            if (!navTicking) {
+                window.requestAnimationFrame(updateActiveNav);
+                navTicking = true;
+            }
+        }, { passive: true });
     </script>
     <script src="https://cdn.usefathom.com/script.js" data-site="RINBNXMR" defer></script>
 </body>

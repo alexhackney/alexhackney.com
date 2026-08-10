@@ -1,0 +1,12 @@
+{
+    "name": "alexhackney.com",
+    "private": true,
+    "description": "Personal site for Alex Hackney",
+    "scripts": {
+        "build": "tailwindcss -i ./resources/css/app.css -o ./public/app.css --minify",
+        "watch": "tailwindcss -i ./resources/css/app.css -o ./public/app.css --watch"
+    },
+    "devDependencies": {
+        "tailwindcss": "^3.4.17"
+    }
+}
