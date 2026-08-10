@@ -140,6 +140,9 @@
     .mobile-nav.active .mobile-nav-link:nth-child(5) {
         transition-delay: 0.3s;
     }
+    .mobile-nav.active .mobile-nav-link:nth-child(6) {
+        transition-delay: 0.35s;
+    }
     .mobile-nav.active .mobile-nav-link {
         opacity: 1;
         transform: translateX(0);

@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Rendering a .env file from a secrets manager looks like a one-liner. Three common approaches silently corrupt the file, truncate values at a hash, or leave your app unable to read its own config.">
+    <meta name="author" content="Alex Hackney">
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
+    <title>Three Ways Writing a Laravel .env File Breaks Production</title>
+
+    <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="manifest" href="/site.webmanifest">
+
+    <link rel="canonical" href="https://alexhackney.com/blog/laravel-env-file-failures/">
+
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://alexhackney.com/blog/laravel-env-file-failures/">
+    <meta property="og:title" content="Three Ways Writing a Laravel .env File Breaks Production">
+    <meta property="og:description" content="Rendering a .env file from a secrets manager looks like a one-liner. Three common approaches silently corrupt the file, truncate values at a hash, or leave your app unable to read its own config.">
+    <meta property="og:image" content="https://alexhackney.com/og-image.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:locale" content="en_US">
+    <meta property="og:site_name" content="Alex Hackney">
+    <meta property="article:published_time" content="2026-08-10">
+    <meta property="article:author" content="Alex Hackney">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Three Ways Writing a Laravel .env File Breaks Production">
+    <meta name="twitter:description" content="Rendering a .env file from a secrets manager looks like a one-liner. It is not.">
+    <meta name="twitter:image" content="https://alexhackney.com/og-image.jpg">
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@graph": [
+            {
+                "@type": "BlogPosting",
+                "@id": "https://alexhackney.com/blog/laravel-env-file-failures/#post",
+                "headline": "Three Ways Writing a Laravel .env File Breaks Production",
+                "description": "Rendering a .env file from a secrets manager looks like a one-liner. Three common approaches silently corrupt the file, truncate values at a hash, or leave your app unable to read its own config.",
+                "url": "https://alexhackney.com/blog/laravel-env-file-failures/",
+                "datePublished": "2026-08-10",
+                "dateModified": "2026-08-10",
+                "inLanguage": "en-US",
+                "image": "https://alexhackney.com/og-image.jpg",
+                "author": { "@id": "https://alexhackney.com/#person" },
+                "publisher": { "@id": "https://alexhackney.com/#person" },
+                "mainEntityOfPage": "https://alexhackney.com/blog/laravel-env-file-failures/",
+                "keywords": "Laravel, .env, dotenv, Doppler, secrets management, phpdotenv, atomic writes, deployment"
+            },
+            {
+                "@type": "Person",
+                "@id": "https://alexhackney.com/#person",
+                "name": "Alex Hackney",
+                "url": "https://alexhackney.com",
+                "jobTitle": "Full Stack Developer"
+            },
+            {
+                "@type": "BreadcrumbList",
+                "itemListElement": [
+                    { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://alexhackney.com/" },
+                    { "@type": "ListItem", "position": 2, "name": "Blog", "item": "https://alexhackney.com/blog/" },
+                    { "@type": "ListItem", "position": 3, "name": "Three Ways Writing a Laravel .env File Breaks Production" }
+                ]
+            }
+        ]
+    }
+    </script>
+
+    <link rel="stylesheet" href="/app.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" media="print" onload="this.media='all'">
+    <noscript>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap">
+    </noscript>
+</head>
+<body class="gradient-bg text-gray-100 font-sans antialiased">
+
+    <nav class="sticky top-0 left-0 right-0 w-full z-50 bg-dark-900/80 backdrop-blur-lg border-b border-white/5">
+        <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <a href="/" class="flex items-center space-x-2">
+                    <span class="text-xl font-bold bg-gradient-to-r from-accent-blue to-accent-purple bg-clip-text text-transparent">AH</span>
+                    <span class="hidden sm:inline text-gray-400 text-sm font-mono">// developer</span>
+                </a>
+                <div class="flex items-center space-x-6 text-sm">
+                    <a href="/blog/" class="text-gray-400 hover:text-white transition-colors">Blog</a>
+                    <a href="/packages/" class="text-gray-400 hover:text-white transition-colors">Packages</a>
+                    <a href="/#contact" class="text-gray-400 hover:text-white transition-colors">Contact</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <article class="relative z-10 py-12 sm:py-20">
+        <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+
+            <nav aria-label="Breadcrumb" class="text-sm text-gray-500 mb-8">
+                <a href="/" class="hover:text-gray-300">Home</a>
+                <span class="mx-2">/</span>
+                <a href="/blog/" class="hover:text-gray-300">Blog</a>
+            </nav>
+
+            <header class="mb-10">
+                <h1 class="text-3xl sm:text-4xl md:text-5xl font-bold mb-5 leading-tight">
+                    Three Ways Writing a Laravel <span class="font-mono text-accent-blue">.env</span> File Breaks Production
+                </h1>
+                <div class="flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-gray-500">
+                    <time datetime="2026-08-10">August 10, 2026</time>
+                    <span class="w-1 h-1 rounded-full bg-gray-600"></span>
+                    <span>8 min read</span>
+                    <span class="w-1 h-1 rounded-full bg-gray-600"></span>
+                    <span>Laravel, secrets management</span>
+                </div>
+            </header>
+
+            <div class="space-y-6 text-gray-300 leading-relaxed text-lg">
+
+                <p class="text-xl text-gray-400">
+                    Pulling secrets from a manager like Doppler, Vault, or AWS Secrets Manager and writing them
+                    into a Laravel <span class="font-mono text-gray-200">.env</span> file looks like a job for one
+                    line of shell. Every version of that one line I have shipped has been wrong, and each one
+                    failed in a way that took hours to trace back to the file itself.
+                </p>
+
+                <p>
+                    Here are the three failures, why each one is easy to miss, and what it takes to actually
+                    close them.
+                </p>
+
+                <h2 class="text-2xl sm:text-3xl font-bold text-white pt-8">1. Your values get truncated at a hash</h2>
+
+                <p>The obvious first attempt:</p>
+
+                <div class="code-block rounded-xl p-4 sm:p-5 border border-white/5">
+                    <pre class="overflow-x-auto"><code class="text-gray-300">doppler secrets download --no-file --format env-no-quotes &gt; .env</code></pre>
+                </div>
+
+                <p>
+                    The <span class="font-mono text-gray-200">env-no-quotes</span> format writes bare, unquoted
+                    values. Which means the moment a value contains a
+                    <span class="font-mono text-accent-red">#</span>, everything from that character onward is
+                    read as a comment and thrown away. No error. No warning. The key is still there, the value is
+                    just shorter than it should be.
+                </p>
+
+                <p>
+                    It does not need whitespace in front of it to trigger. A password of
+                    <span class="font-mono text-gray-200">Xk9#mQ2vL</span> becomes
+                    <span class="font-mono text-gray-200">Xk9</span>, and your app starts failing authentication
+                    against a database that is up, reachable, and perfectly healthy.
+                </p>
+
+                <p>
+                    This is not an edge case. Every password generator I know of includes
+                    <span class="font-mono text-gray-200">#</span> in its symbol set. If you generate credentials
+                    randomly, you will hit this, and the only question is whether you hit it in staging or in
+                    production.
+                </p>
+
+                <p>
+                    A value containing a space fails differently and more loudly. It is a hard parse error that
+                    takes down the entire file rather than just that one key, so every config value in the app
+                    goes empty at once.
+                </p>
+
+                <h2 class="text-2xl sm:text-3xl font-bold text-white pt-8">2. The redirect destroys the file before anything runs</h2>
+
+                <p>
+                    Look at the shell operator in that same command, not the format flag.
+                    <span class="font-mono text-gray-200">&gt; .env</span> is evaluated by the shell
+                    <em>before</em> <span class="font-mono text-gray-200">doppler</span> is executed. The file is
+                    opened and truncated to zero bytes first, and only then does the command that is supposed to
+                    fill it start running.
+                </p>
+
+                <p>
+                    So if Doppler is having an outage, if the token expired, if DNS fails, if the box has no
+                    network for four seconds, you do not get your old <span class="font-mono text-gray-200">.env</span>
+                    back. You get an empty one. The application does not boot, and the file that would have told
+                    you what it used to contain is gone.
+                </p>
+
+                <p>The usual fix is to write to a temp file first:</p>
+
+                <div class="code-block rounded-xl p-4 sm:p-5 border border-white/5">
+                    <pre class="overflow-x-auto"><code class="text-gray-300">doppler secrets download ... &gt; /tmp/.env.new &amp;&amp; mv /tmp/.env.new /app/.env</code></pre>
+                </div>
+
+                <p>
+                    This is better, and it is still broken. <span class="font-mono text-gray-200">mv</span> is only
+                    atomic within a single filesystem, because that case is a
+                    <span class="font-mono text-gray-200">rename()</span> syscall that either happens or does not.
+                    Across filesystems there is no such syscall available, so
+                    <span class="font-mono text-gray-200">mv</span> quietly degrades to copy-then-unlink.
+                </p>
+
+                <p>
+                    On most servers <span class="font-mono text-gray-200">/tmp</span> and
+                    <span class="font-mono text-gray-200">/app</span> are different filesystems. That gives you a
+                    window, small but real, where <span class="font-mono text-gray-200">.env</span> exists on disk
+                    half written. A worker restarting inside that window reads a truncated file.
+                </p>
+
+                <p>
+                    The fix is to put the temp file in the same directory as the target, so the rename is
+                    guaranteed to be a real atomic <span class="font-mono text-gray-200">rename()</span>.
+                </p>
+
+                <h2 class="text-2xl sm:text-3xl font-bold text-white pt-8">3. The file is perfect and your app cannot read it</h2>
+
+                <p>Doing it from PHP instead does not save you:</p>
+
+                <div class="code-block rounded-xl p-4 sm:p-5 border border-white/5">
+                    <pre class="overflow-x-auto"><code class="text-gray-300"><span class="text-accent-blue">file_put_contents</span>(<span class="text-accent-blue">base_path</span>(<span class="text-yellow-300">'.env'</span>), <span class="text-accent-red">$rendered</span>);   <span class="text-gray-500">// running as root</span></code></pre>
+                </div>
+
+                <p>
+                    Run that during a deploy as root and the resulting file is owned by root with default
+                    permissions. php-fpm runs as a different user and cannot read it.
+                </p>
+
+                <p>
+                    Here is what makes this one genuinely nasty: it does not crash. phpdotenv does not treat an
+                    unreadable env file as fatal in the way you would hope. Every config value silently becomes
+                    empty, Laravel boots successfully, and then every single request fails somewhere deep in the
+                    application with an error that looks nothing like a permissions problem. You will go looking
+                    at your database, your cache, your queue, and your DNS long before you go looking at
+                    <span class="font-mono text-gray-200">ls -l .env</span>.
+                </p>
+
+                <h2 class="text-2xl sm:text-3xl font-bold text-white pt-8">What actually closes this</h2>
+
+                <p>
+                    Each of these has a fix. Quote and escape correctly instead of using a bare format. Write the
+                    temp file in the target directory and rename. Set ownership and mode explicitly. Those are all
+                    necessary, and none of them are sufficient, because they are all things you have to remember
+                    to keep doing correctly.
+                </p>
+
+                <p>
+                    The stronger guarantee is to verify the output rather than trust the renderer. Before writing
+                    anything, take the bytes you are about to write, load them back through the full phpdotenv
+                    stack, the same one Laravel boots with, and compare the result value by value against what the
+                    secrets manager actually sent. If anything fails to match, refuse to write and name the keys
+                    that failed:
+                </p>
+
+                <div class="code-block rounded-xl p-4 sm:p-5 border border-white/5">
+                    <pre class="overflow-x-auto"><code class="text-gray-300">Rendered output does not round-trip: DB_PASSWORD, FIREBASE_PRIVATE_KEY.
+The value contains characters this renderer cannot safely express. Nothing was written.</code></pre>
+                </div>
+
+                <p>
+                    The detail that makes this worth doing properly: in phpdotenv, variable interpolation happens
+                    in the <em>loader</em>, not the parser. A guard built only on the parser will happily pass a
+                    value containing <span class="font-mono text-gray-200">${...}</span> that then expands into
+                    something completely different at boot. Checking the parser alone gives you a guarantee that
+                    is not actually a guarantee.
+                </p>
+
+                <p>
+                    A round-trip check catches every one of these by construction, including the ones nobody has
+                    thought of yet, because it does not care <em>why</em> the value came back wrong. It only cares
+                    that it did.
+                </p>
+
+                <h2 class="text-2xl sm:text-3xl font-bold text-white pt-8">The package</h2>
+
+                <p>
+                    I wrote all of this up as <a href="/packages/laravel-doppler/" class="text-accent-blue hover:underline">laravel-doppler</a>,
+                    which renders a Laravel <span class="font-mono text-gray-200">.env</span> from Doppler secrets
+                    with all four properties above: correct escaping, atomic same-directory rename, explicit
+                    ownership, and a round-trip guarantee that refuses rather than writing something wrong.
+                </p>
+
+                <div class="code-block rounded-xl p-4 sm:p-5 border border-white/5">
+                    <pre class="overflow-x-auto"><code class="text-gray-300">composer require alexhackney/laravel-doppler
+php artisan env:sync</code></pre>
+                </div>
+
+                <p>
+                    Values verified by test to round-trip correctly:
+                    <span class="font-mono text-gray-200">#</span>, spaces, single and double quotes, backslashes,
+                    <span class="font-mono text-gray-200">$</span>,
+                    <span class="font-mono text-gray-200">${}</span>, tabs, newlines, CRLF, UTF-8, PEM private
+                    keys, JSON, and 4KB values made entirely of the above.
+                </p>
+
+                <p>
+                    Source is on <a href="https://github.com/alexhackney/laravel-doppler" target="_blank" rel="noopener noreferrer" class="text-accent-blue hover:underline">GitHub</a>.
+                    Not affiliated with, endorsed by, or sponsored by Doppler Inc.
+                </p>
+
+            </div>
+
+            <div class="section-divider my-12"></div>
+
+            <div class="flex flex-col sm:flex-row gap-4 justify-between items-start sm:items-center">
+                <div>
+                    <div class="text-sm text-gray-500 mb-1">Written by</div>
+                    <div class="text-white font-semibold">Alex Hackney</div>
+                    <div class="text-sm text-gray-500">Full stack developer, Clearwater FL</div>
+                </div>
+                <a href="/packages/laravel-doppler/" class="px-6 py-3 bg-accent-blue hover:bg-blue-600 rounded-lg font-medium transition-colors !text-black">
+                    View laravel-doppler
+                </a>
+            </div>
+
+        </div>
+    </article>
+
+    <footer class="py-8 border-t border-white/5 relative z-10">
+        <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row items-center justify-between text-gray-500 text-sm">
+                <p>Designed &amp; Built by Alex Hackney</p>
+                <p class="mt-2 md:mt-0"><a href="/" class="hover:text-gray-300">alexhackney.com</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.usefathom.com/script.js" data-site="RINBNXMR" defer></script>
+</body>
+</html>

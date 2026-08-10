@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Modular plugin-based video player for the web. Lightweight TypeScript core with HLS, DASH, and Chromecast support as first-class plugins.">
+    <meta name="author" content="Alex Hackney">
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
+    <title>Scarlett Player | Alex Hackney</title>
+
+    <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+
+    <link rel="canonical" href="https://alexhackney.com/packages/scarlett-player/">
+
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://alexhackney.com/packages/scarlett-player/">
+    <meta property="og:title" content="Scarlett Player | Alex Hackney">
+    <meta property="og:description" content="Modular plugin-based video player for the web. Lightweight TypeScript core with HLS, DASH, and Chromecast support as first-class plugins.">
+    <meta property="og:image" content="https://alexhackney.com/og-image.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:site_name" content="Alex Hackney">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Scarlett Player | Alex Hackney">
+    <meta name="twitter:description" content="Modular plugin-based video player for the web. Lightweight TypeScript core with HLS, DASH, and Chromecast support as first-class plugins.">
+    <meta name="twitter:image" content="https://alexhackney.com/og-image.jpg">
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@graph": [
+                {
+                        "@type": "SoftwareSourceCode",
+                        "@id": "https://alexhackney.com/packages/scarlett-player/#software",
+                        "name": "Scarlett Player",
+                        "description": "Modular plugin-based video player for the web. Lightweight TypeScript core with HLS, DASH, and Chromecast support as first-class plugins.",
+                        "url": "https://alexhackney.com/packages/scarlett-player/",
+                        "codeRepository": "https://github.com/Hackney-Enterprises-Inc/scarlett-player",
+                        "programmingLanguage": "TypeScript",
+                        "author": {
+                                "@id": "https://alexhackney.com/#person"
+                        }
+                },
+                {
+                        "@type": "Person",
+                        "@id": "https://alexhackney.com/#person",
+                        "name": "Alex Hackney",
+                        "url": "https://alexhackney.com"
+                },
+                {
+                        "@type": "BreadcrumbList",
+                        "itemListElement": [
+                                {
+                                        "@type": "ListItem",
+                                        "position": 1,
+                                        "name": "Home",
+                                        "item": "https://alexhackney.com/"
+                                },
+                                {
+                                        "@type": "ListItem",
+                                        "position": 2,
+                                        "name": "Packages",
+                                        "item": "https://alexhackney.com/packages/"
+                                },
+                                {
+                                        "@type": "ListItem",
+                                        "position": 3,
+                                        "name": "Scarlett Player"
+                                }
+                        ]
+                }
+        ]
+    }
+    </script>
+
+    <link rel="stylesheet" href="/app.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" media="print" onload="this.media='all'">
+    <noscript>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap">
+    </noscript>
+</head>
+<body class="gradient-bg text-gray-100 font-sans antialiased">
+
+    <nav class="sticky top-0 left-0 right-0 w-full z-50 bg-dark-900/80 backdrop-blur-lg border-b border-white/5">
+        <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <a href="/" class="flex items-center space-x-2">
+                    <span class="text-xl font-bold bg-gradient-to-r from-accent-blue to-accent-purple bg-clip-text text-transparent">AH</span>
+                    <span class="hidden sm:inline text-gray-400 text-sm font-mono">// developer</span>
+                </a>
+                <div class="flex items-center space-x-6 text-sm">
+                    <a href="/blog/" class="text-gray-400 hover:text-white transition-colors">Blog</a>
+                    <a href="/packages/" class="text-white transition-colors">Packages</a>
+                    <a href="/#contact" class="text-gray-400 hover:text-white transition-colors">Contact</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="relative z-10 py-12 sm:py-20">
+        <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+
+            <nav aria-label="Breadcrumb" class="text-sm text-gray-500 mb-8">
+                <a href="/" class="hover:text-gray-300">Home</a>
+                <span class="mx-2">/</span>
+                <a href="/packages/" class="hover:text-gray-300">Packages</a>
+            </nav>
+
+            <header class="mb-10">
+                <div class="flex items-center gap-3 mb-4">
+                    <span class="px-2 py-1 bg-dark-600 rounded text-xs text-gray-400">TypeScript</span>
+                    <span class="text-sm text-gray-500">Work in progress</span>
+                </div>
+                <h1 class="text-3xl sm:text-4xl md:text-5xl font-bold mb-5">Scarlett Player</h1>
+                <p class="text-xl text-gray-400 leading-relaxed">A modular, plugin-based video player with a deliberately small core.</p>
+
+                <div class="flex flex-wrap gap-3 mt-7">
+                    <a href="https://github.com/Hackney-Enterprises-Inc/scarlett-player" target="_blank" rel="noopener noreferrer"
+                       class="inline-flex items-center gap-2 px-5 py-2.5 bg-dark-700 hover:bg-dark-600 border border-white/10 rounded-lg text-sm font-medium transition-colors">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                        <span>GitHub</span>
+                    </a>
+                </div>
+            </header>
+
+            <section class="mb-12">
+                <h2 class="text-xl font-semibold mb-4 text-white">Why it exists</h2>
+                <div class="space-y-4 text-gray-400 leading-relaxed">
+                    <p>Most web video players ship every feature in one bundle, so a page that only ever plays a progressive MP4 still downloads the HLS engine, the DASH engine, and the cast integration.</p>
+                    <p>Scarlett inverts that. The core handles playback, state, and the plugin contract, and nothing else. HLS, DASH, and Chromecast are first-class plugins you opt into, so you ship only what you actually use.</p>
+                </div>
+            </section>
+
+            <section class="mb-12">
+                <h2 class="text-xl font-semibold mb-5 text-white">What it does</h2>
+                <div class="grid sm:grid-cols-2 gap-4">
+                    <div class="card-hover bg-dark-700/30 rounded-xl p-5">
+                        <h3 class="font-semibold text-white mb-2">Small core</h3>
+                        <p class="text-sm text-gray-400 leading-relaxed">Playback, state management, and the plugin contract. Everything else is opt-in.</p>
+                    </div>
+                    <div class="card-hover bg-dark-700/30 rounded-xl p-5">
+                        <h3 class="font-semibold text-white mb-2">Streaming plugins</h3>
+                        <p class="text-sm text-gray-400 leading-relaxed">HLS and DASH support as separate, independently loadable plugins.</p>
+                    </div>
+                    <div class="card-hover bg-dark-700/30 rounded-xl p-5">
+                        <h3 class="font-semibold text-white mb-2">Chromecast</h3>
+                        <p class="text-sm text-gray-400 leading-relaxed">Cast integration as a plugin rather than a bundled dependency.</p>
+                    </div>
+                    <div class="card-hover bg-dark-700/30 rounded-xl p-5">
+                        <h3 class="font-semibold text-white mb-2">TypeScript</h3>
+                        <p class="text-sm text-gray-400 leading-relaxed">Fully typed, built with Vite.</p>
+                    </div>
+                </div>
+            </section>
+
+            <p class="text-sm text-gray-500 border-t border-white/5 pt-6">This project is under active development and the API is not yet stable.</p>
+
+        </div>
+    </main>
+
+    <footer class="py-8 border-t border-white/5 relative z-10">
+        <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row items-center justify-between text-gray-500 text-sm">
+                <p>Designed &amp; Built by Alex Hackney</p>
+                <p class="mt-2 md:mt-0"><a href="/" class="hover:text-gray-300">alexhackney.com</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.usefathom.com/script.js" data-site="RINBNXMR" defer></script>
+</body>
+</html>

@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Writing on Laravel, PHP, secrets management, video streaming infrastructure, and the production failures that are worth documenting.">
+    <meta name="author" content="Alex Hackney">
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
+    <title>Blog | Alex Hackney</title>
+
+    <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+
+    <link rel="canonical" href="https://alexhackney.com/blog/">
+
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://alexhackney.com/blog/">
+    <meta property="og:title" content="Blog | Alex Hackney">
+    <meta property="og:description" content="Writing on Laravel, PHP, secrets management, video streaming infrastructure, and the production failures that are worth documenting.">
+    <meta property="og:image" content="https://alexhackney.com/og-image.jpg">
+    <meta property="og:site_name" content="Alex Hackney">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Blog | Alex Hackney">
+    <meta name="twitter:description" content="Writing on Laravel, PHP, secrets management, and video streaming infrastructure.">
+    <meta name="twitter:image" content="https://alexhackney.com/og-image.jpg">
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Blog",
+        "@id": "https://alexhackney.com/blog/#blog",
+        "url": "https://alexhackney.com/blog/",
+        "name": "Alex Hackney's Blog",
+        "description": "Writing on Laravel, PHP, secrets management, and video streaming infrastructure.",
+        "inLanguage": "en-US",
+        "author": { "@id": "https://alexhackney.com/#person" },
+        "blogPost": [
+            {
+                "@type": "BlogPosting",
+                "headline": "Three Ways Writing a Laravel .env File Breaks Production",
+                "url": "https://alexhackney.com/blog/laravel-env-file-failures/",
+                "datePublished": "2026-08-10"
+            }
+        ]
+    }
+    </script>
+
+    <link rel="stylesheet" href="/app.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" media="print" onload="this.media='all'">
+    <noscript>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap">
+    </noscript>
+</head>
+<body class="gradient-bg text-gray-100 font-sans antialiased">
+
+    <nav class="sticky top-0 left-0 right-0 w-full z-50 bg-dark-900/80 backdrop-blur-lg border-b border-white/5">
+        <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <a href="/" class="flex items-center space-x-2">
+                    <span class="text-xl font-bold bg-gradient-to-r from-accent-blue to-accent-purple bg-clip-text text-transparent">AH</span>
+                    <span class="hidden sm:inline text-gray-400 text-sm font-mono">// developer</span>
+                </a>
+                <div class="flex items-center space-x-6 text-sm">
+                    <a href="/blog/" class="text-white transition-colors">Blog</a>
+                    <a href="/packages/" class="text-gray-400 hover:text-white transition-colors">Packages</a>
+                    <a href="/#contact" class="text-gray-400 hover:text-white transition-colors">Contact</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="relative z-10 py-12 sm:py-20">
+        <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+
+            <header class="mb-12">
+                <h1 class="text-3xl sm:text-4xl md:text-5xl font-bold mb-4">Blog</h1>
+                <p class="text-gray-400 text-lg">
+                    Laravel, PHP, secrets management, video streaming infrastructure, and the production
+                    failures that turned out to be worth writing down.
+                </p>
+            </header>
+
+            <div class="section-divider mb-10"></div>
+
+            <div class="space-y-6">
+                <a href="/blog/laravel-env-file-failures/" class="card-hover block bg-dark-700/30 rounded-xl p-6">
+                    <div class="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-gray-500 mb-3">
+                        <time datetime="2026-08-10">August 10, 2026</time>
+                        <span class="w-1 h-1 rounded-full bg-gray-600"></span>
+                        <span>8 min read</span>
+                    </div>
+                    <h2 class="text-xl sm:text-2xl font-semibold mb-3 text-white">
+                        Three Ways Writing a Laravel .env File Breaks Production
+                    </h2>
+                    <p class="text-gray-400">
+                        Pulling secrets into a .env file looks like a job for one line of shell. That line
+                        truncates values at a hash, destroys the target file before it runs, and produces
+                        something your app cannot read. Here is why, and what actually closes it.
+                    </p>
+                    <div class="flex flex-wrap gap-2 mt-4">
+                        <span class="px-2 py-1 bg-dark-600 rounded text-xs text-gray-400">Laravel</span>
+                        <span class="px-2 py-1 bg-dark-600 rounded text-xs text-gray-400">Secrets Management</span>
+                        <span class="px-2 py-1 bg-dark-600 rounded text-xs text-gray-400">Deployment</span>
+                    </div>
+                </a>
+            </div>
+
+        </div>
+    </main>
+
+    <footer class="py-8 border-t border-white/5 relative z-10">
+        <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row items-center justify-between text-gray-500 text-sm">
+                <p>Designed &amp; Built by Alex Hackney</p>
+                <p class="mt-2 md:mt-0"><a href="/" class="hover:text-gray-300">alexhackney.com</a></p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.usefathom.com/script.js" data-site="RINBNXMR" defer></script>
+</body>
+</html>
